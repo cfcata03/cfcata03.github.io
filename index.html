@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bee-Bot - Prezentare pentru Traineri</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #000000 100%);
+            overflow: hidden;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            background: white;
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px 30px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            animation: slideIn 0.5s ease-out;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                width: 95%;
+                height: 90vh;
+                padding: 30px 20px;
+                border-radius: 15px;
+            }
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        h1 {
+            color: #FFA500;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+                margin-bottom: 15px;
+            }
+        }
+
+        h2 {
+            color: #000000;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .bee-emoji {
+            font-size: 5em;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .bee-emoji {
+                font-size: 3em;
+                margin: 15px 0;
+            }
+        }
+
+        ul {
+            list-style: none;
+            font-size: 1.3em;
+            line-height: 2;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            ul {
+                font-size: 1em;
+                line-height: 1.6;
+            }
+        }
+
+        li {
+            margin: 15px 0;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            li {
+                margin: 10px 0;
+                padding-left: 35px;
+            }
+        }
+
+        li:before {
+            content: "🐝";
+            position: absolute;
+            left: 0;
+        }
+
+        .buttons-demo {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px auto;
+            max-width: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .buttons-demo {
+                gap: 10px;
+                margin: 20px auto;
+                max-width: 300px;
+            }
+        }
+
+        .button-item {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .button-item {
+                padding: 15px;
+                font-size: 1.5em;
+                border-radius: 10px;
+            }
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #000000;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            touch-action: manipulation;
+        }
+
+        @media (max-width: 768px) {
+            button {
+                padding: 12px 25px;
+                font-size: 0.9em;
+            }
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #FFA500 0%, #FFD700 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(255, 165, 0, 0.6);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-number {
+            text-align: center;
+            color: #999;
+            font-size: 1em;
+            margin-top: 20px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+
+        .grid-demo {
+            display: grid;
+            grid-template-columns: repeat(4, 80px);
+            grid-template-rows: repeat(4, 80px);
+            gap: 5px;
+            margin: 30px auto;
+            justify-content: center;
+        }
+
+        .grid-cell {
+            background: #f0f0f0;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .benefits {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                margin-top: 15px;
+            }
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, #667eea22 0%, #764ba222 100%);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .benefit-card {
+                padding: 15px;
+                border-radius: 10px;
+            }
+        }
+
+        .benefit-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .benefit-card h3 {
+                font-size: 1em;
+                margin-bottom: 8px;
+            }
+
+            .benefit-card p {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Titlu -->
+        <div class="slide active">
+            <div class="content">
+                <h1>🐝 Bee-Bot</h1>
+                <h2>Robotul Educațional pentru Copii</h2>
+                <div class="bee-emoji">🤖🐝</div>
+                <p style="text-align: center; font-size: 1.3em; color: #666; margin-top: 20px;">
+                    Prezentare pentru traineri Logiscool
+                </p>
+
+                <style>
+                    @media (max-width: 768px) {
+                        .slide:first-child p {
+                            font-size: 1em !important;
+                            margin-top: 15px !important;
+                        }
+                    }
+                </style>
+            </div>
+            <div class="controls">
+                <button disabled>← Anterior</button>
+                <button onclick="nextSlide()">Următor →</button>
+            </div>
+            <div class="slide-number">1 / 6</div>
+        </div>
+
+        <!-- Slide 2: Ce este Bee-Bot -->
+        <div class="slide">
+            <div class="content">
+                <h2>Ce este Bee-Bot?</h2>
+                <ul>
+                    <li>Robot educațional programabil în formă de <span class="highlight">albină</span></li>
+                    <li>Destinat copiilor de <span class="highlight">3-7 ani</span></li>
+                    <li>Introduce conceptele de bază ale <span class="highlight">programării</span></li>
+                </ul>
+            </div>
+            <div class="controls">
+                <button onclick="prevSlide()">← Anterior</button>
+                <button onclick="nextSlide()">Următor →</button>
+            </div>
+            <div class="slide-number">2 / 6</div>
+        </div>
+
+        <!-- Slide 3: Butoanele -->
+        <div class="slide">
+            <div class="content">
+                <h2>Butoanele Bee-Bot</h2>
+                <div class="buttons-demo">
+                    <div class="button-item">↑</div>
+                    <div class="button-item">↓</div>
+                    <div class="button-item">←</div>
+                    <div class="button-item">→</div>
+                    <div class="button-item" style="background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);">GO</div>
+                    <div class="button-item" style="background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);">X</div>
+                    <div class="button-item" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">⏸</div>
+                </div>
+                <ul style="font-size: 1.1em;">
+                    <li><strong>Săgeți:</strong> Înainte, înapoi, stânga (90°), dreapta (90°)</li>
+                    <li><strong>GO:</strong> Execută secvența programată</li>
+                    <li><strong>X (Clear):</strong> Șterge toate comenzile</li>
+                    <li><strong>Pause:</strong> Pauză de 1 secundă în secvență</li>
+                </ul>
+
+                <style>
+                    @media (max-width: 768px) {
+                        .slide:nth-child(3) ul {
+                            font-size: 0.9em !important;
+                        }
+                    }
+                </style>
+            </div>
+            <div class="controls">
+                <button onclick="prevSlide()">← Anterior</button>
+                <button onclick="nextSlide()">Următor →</button>
+            </div>
+            <div class="slide-number">3 / 6</div>
+        </div>
+
+        <!-- Slide 4: Cum funcționează -->
+        <div class="slide">
+            <div class="content">
+                <h2>Cum Funcționează?</h2>
+                <ul>
+                    <li><strong>Pasul 1:</strong> Apasă butoane pentru a crea o <span class="highlight">secvență</span> (max 40 comenzi)</li>
+                    <li><strong>Pasul 2:</strong> Apasă <span class="highlight">GO</span> pentru a executa</li>
+                    <li><strong>Pasul 3:</strong> Bee-Bot se mișcă pas cu pas, <span class="highlight">15 cm</span> per comandă</li>
+                    <li><strong>Pasul 4:</strong> Emite sunete și luminează când finalizează</li>
+                    <li>Memorie: păstrează ultima secvență până la apăsarea lui <span class="highlight">Clear</span></li>
+                    <li>Grilă: lucrează pe covoare cu caroiaje de <span class="highlight">15x15 cm</span></li>
+                </ul>
+            </div>
+            <div class="controls">
+                <button onclick="prevSlide()">← Anterior</button>
+                <button onclick="nextSlide()">Următor →</button>
+            </div>
+            <div class="slide-number">4 / 6</div>
+        </div>
+
+        <!-- Slide 5: Concepte de programare -->
+        <div class="slide">
+            <div class="content">
+                <h2>Concepte de Programare Învățate</h2>
+                <div class="benefits">
+                    <div class="benefit-card">
+                        <h3>📝 Secvențiere</h3>
+                        <p>Ordinea comenzilor contează</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h3>🐛 Debugging</h3>
+                        <p>Găsirea și corectarea erorilor</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h3>🎯 Planificare</h3>
+                        <p>Gândire înainte - de la start la final</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h3>🔄 Algoritmică</h3>
+                        <p>Crearea de pași pentru rezolvare</p>
+                    </div>
+                </div>
+                <ul style="margin-top: 30px; font-size: 1.1em;">
+                    <li>Gândire logică și rezolvare de probleme</li>
+                    <li>Relații spațiale (stânga, dreapta, înainte)</li>
+                    <li>Estimare și numărare</li>
+                </ul>
+
+                <style>
+                    @media (max-width: 768px) {
+                        .slide:nth-child(5) ul {
+                            margin-top: 20px !important;
+                            font-size: 0.9em !important;
+                        }
+                    }
+                </style>
+            </div>
+            <div class="controls">
+                <button onclick="prevSlide()">← Anterior</button>
+                <button onclick="nextSlide()">Următor →</button>
+            </div>
+            <div class="slide-number">5 / 6</div>
+        </div>
+
+        <!-- Slide 6: Tips pentru traineri -->
+        <div class="slide">
+            <div class="content">
+                <h2>Tips pentru Traineri</h2>
+                <ul>
+                    <li><strong>Start simplu:</strong> Începe cu 2-3 comenzi, crește treptat</li>
+                    <li><strong>Învățare prin joc:</strong> Povești, misiuni, personaje</li>
+                    <li><strong>Încurajează predicția:</strong> "Unde crezi că va ajunge?"</li>
+                    <li><strong>Învață din erori:</strong> Erorile sunt oportunități de învățare</li>
+                    <li><strong>Lucru în echipă:</strong> Programare colaborativă</li>
+                    <li><strong>Provocări variate:</strong> Labirinturi, căi, povești</li>
+                </ul>
+            </div>
+            <div class="controls">
+                <button onclick="prevSlide()">← Anterior</button>
+                <button disabled>Următor →</button>
+            </div>
+            <div class="slide-number">6 / 6</div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = n;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+    </script>
+</body>
+</html>
