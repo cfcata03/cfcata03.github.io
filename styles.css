@@ -329,14 +329,14 @@ body {
     gap: 2rem;
 }
 
-a.project-card,
-a.project-card * {
+a.project-card {
     text-decoration: none;
     color: inherit;
+    display: block;
 }
 
-a.project-card {
-    display: block;
+a.project-card .tag {
+    color: var(--white);
 }
 
 .project-card {
