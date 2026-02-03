@@ -90,8 +90,12 @@ document.querySelectorAll('.decoration-box').forEach(box => {
 
         setTimeout(() => {
             box.classList.remove('spinning');
+            box.style.transition = 'none';
             box.style.transform = `translate(0, ${scrolled * speed}px) rotate(${baseRot}deg)`;
-            spinning = false;
+            requestAnimationFrame(() => {
+                box.style.transition = '';
+                spinning = false;
+            });
         }, 800);
     });
 });
