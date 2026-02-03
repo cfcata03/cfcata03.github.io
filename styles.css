@@ -38,6 +38,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 .nav-logo-wrapper {
@@ -97,11 +98,14 @@ body {
 .nav-links {
     display: none;
     gap: 2rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .nav-link {
     font-family: 'Archivo', sans-serif;
-    font-size: 1.125rem;
+    font-size: 1.35rem;
     font-weight: 600;
     color: var(--black);
     text-decoration: none;
@@ -126,6 +130,41 @@ body {
 
 .nav-link:hover::after {
     width: 100%;
+}
+
+.resume-btn {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Archivo', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--black);
+    text-decoration: none;
+    background-color: var(--brand-yellow);
+    border: 4px solid var(--black);
+    border-radius: 0.75rem;
+    padding: 0.5rem 1.25rem;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
+    transition: all 0.2s ease;
+}
+
+.resume-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 rgba(0, 0, 0, 1);
+}
+
+.resume-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
+}
+
+.resume-mobile {
+    background-color: var(--brand-yellow);
+    padding: 0.5rem 2rem;
+    border: 4px solid var(--black);
+    border-radius: 0.75rem;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
 }
 
 .hamburger {
@@ -540,6 +579,10 @@ a.project-card .tag {
 
     .hamburger {
         display: none;
+    }
+
+    .resume-btn {
+        display: flex;
     }
 
     .hero-title {
