@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexandru Calin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;900&family=Dela+Gothic+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-logo-wrapper">
+                <div class="nav-deco nav-deco-purple"></div>
+                <div class="nav-deco nav-deco-yellow"></div>
+                <div class="nav-deco nav-deco-orange"></div>
+                <div class="nav-logo">AC</div>
+            </div>
+            <div class="nav-links">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#work" class="nav-link">Work</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" class="mobile-link">About</a>
+        <a href="#work" class="mobile-link">Work</a>
+        <a href="#contact" class="mobile-link">Contact</a>
+    </div>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Alexandru<br>Calin</h1>
+                <p class="hero-subtitle">Aspiring Engineer & Developer</p>
+            </div>
+            <div class="hero-decoration">
+                <div class="decoration-box box-purple"></div>
+                <div class="decoration-box box-yellow"></div>
+                <div class="decoration-box box-orange"></div>
+            </div>
+        </section>
+
+        <section id="about" class="about-section">
+            <div class="section-container">
+                <div class="content-box">
+                    <h2 class="section-title">About Me</h2>
+                    <p class="section-text">Engineering student at Polytechnic University of Bucharest passionate about web & software development.</p>
+                    <p class="section-text">Proficient in Python, C++/C/C#, and web technologies (HTML/CSS). I build practical projects and continuously explore new technologies, focusing on applying my skills to create real-world solutions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="work" class="work-section">
+            <div class="section-container">
+                <h2 class="section-title center">Featured Work</h2>
+                <div class="projects-grid">
+                    <div class="project-card card-purple">
+                        <div class="project-number">01</div>
+                        <h3 class="project-title">Chain Reaction Project</h3>
+                        <p class="project-description">Multi-process nuclear chain reaction simulator using IPC mechanisms with real-time statistics and concurrent process management.</p>
+                        <div class="project-tags">
+                            <span class="tag">C</span>
+                            <span class="tag">IPC</span>
+                            <span class="tag">POSIX</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card card-yellow">
+                        <div class="project-number">02</div>
+                        <h3 class="project-title">Portfolio Redesign</h3>
+                        <p class="project-description">A bold, brutalist approach to showcasing creative work with maximum impact.</p>
+                        <div class="project-tags">
+                            <span class="tag">Design</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">Animation</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card card-orange">
+                        <div class="project-number">03</div>
+                        <h3 class="project-title">Task Manager App</h3>
+                        <p class="project-description">Streamlined productivity tool with real-time collaboration features.</p>
+                        <div class="project-tags">
+                            <span class="tag">Vue.js</span>
+                            <span class="tag">Firebase</span>
+                            <span class="tag">PWA</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card card-purple-dark">
+                        <div class="project-number">04</div>
+                        <h3 class="project-title">Minecraft Server Manager</h3>
+                        <p class="project-description">Custom server management application with player tracking, world backups, and plugin configuration.</p>
+                        <div class="project-tags">
+                            <span class="tag">Java</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">MySQL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="section-container">
+                <div class="contact-box">
+                    <h2 class="section-title">Let's Work Together</h2>
+                    <p class="contact-text">Have a project in mind? Let's create something amazing.</p>
+                    <div class="contact-links">
+                        <a href="mailto:calin.alexandru102@gmail.com" class="contact-btn btn-orange">
+                            <span>Email Me</span>
+                        </a>
+                        <a href="https://instagram.com/cefacicata" target="_blank" class="contact-btn btn-purple">
+                            <span>Instagram</span>
+                        </a>
+                        <a href="https://github.com/cfcata03" target="_blank" class="contact-btn btn-yellow">
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/alexandru-calin-976050287/" target="_blank" class="contact-btn btn-purple-dark">
+                            <span>LinkedIn</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Alexandru Calin. All rights reserved.</p>
+            <p class="footer-tagline">Designed & Built with love</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

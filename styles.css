@@ -1,0 +1,537 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-white: #eedfd0;
+    --brand-purple: #D0B4F4;
+    --brand-purple-dark: rgb(196, 118, 166);
+    --brand-yellow: #FFC52F;
+    --accent-orange: #FF612F;
+    --black: #000000;
+    --white: #FFFFFF;
+}
+
+body {
+    font-family: 'Archivo', sans-serif;
+    background-color: var(--primary-white);
+    color: var(--black);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Navbar */
+.navbar {
+    position: sticky;
+    top: 0;
+    background-color: var(--primary-white);
+    border-bottom: 8px solid var(--black);
+    padding: 1.5rem 2rem;
+    z-index: 1000;
+}
+
+.nav-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--black);
+    position: relative;
+    z-index: 2;
+    text-shadow: 3px 3px 0 rgba(255, 255, 255, 0.5);
+}
+
+.nav-deco {
+    position: absolute;
+    border: 3px solid var(--black);
+    border-radius: 0.5rem;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.nav-deco-purple {
+    width: 30px;
+    height: 30px;
+    background-color: var(--brand-purple);
+    top: -4px;
+    left: -6px;
+    transform: rotate(-15deg);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
+}
+
+.nav-deco-yellow {
+    width: 22px;
+    height: 22px;
+    background-color: var(--brand-yellow);
+    bottom: -2px;
+    right: -4px;
+    transform: rotate(20deg);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
+}
+
+.nav-deco-orange {
+    width: 26px;
+    height: 26px;
+    background-color: var(--accent-orange);
+    top: -2px;
+    right: -6px;
+    transform: rotate(10deg);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
+}
+
+.nav-links {
+    display: none;
+    gap: 2rem;
+}
+
+.nav-link {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--black);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background-color: var(--accent-orange);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--brand-purple);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.hamburger span {
+    width: 30px;
+    height: 3px;
+    background-color: var(--black);
+    transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(9px, 9px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(9px, -9px);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--brand-purple);
+    border-left: 8px solid var(--black);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.mobile-menu.active {
+    transform: translateX(0);
+}
+
+.mobile-link {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 2.5rem;
+    color: var(--black);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.mobile-link:hover {
+    color: var(--white);
+}
+
+/* Hero Section */
+.hero {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    text-align: center;
+    z-index: 2;
+}
+
+.hero-title {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+    text-shadow: 6px 6px 0 rgba(255, 255, 255, 0.25);
+}
+
+.hero-subtitle {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--brand-purple-dark);
+    margin-top: 1.5rem;
+}
+
+.hero-decoration {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.decoration-box {
+    position: absolute;
+    border: 8px solid var(--black);
+    border-radius: 1.5rem;
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+}
+
+.box-purple {
+    width: 200px;
+    height: 200px;
+    background-color: var(--brand-purple);
+    top: -100px;
+    left: -300px;
+    transform: rotate(-15deg);
+    box-shadow: 12px 12px 0 rgba(0, 0, 0, 1);
+}
+
+.box-yellow {
+    width: 150px;
+    height: 150px;
+    background-color: var(--brand-yellow);
+    top: 50px;
+    right: -250px;
+    transform: rotate(25deg);
+    box-shadow: 12px 12px 0 rgba(0, 0, 0, 1);
+}
+
+.box-orange {
+    width: 180px;
+    height: 180px;
+    background-color: var(--accent-orange);
+    top: -230px;
+    right: -200px;
+    transform: rotate(10deg);
+    box-shadow: 12px 12px 0 rgba(0, 0, 0, 1);
+}
+
+/* Section Containers */
+.section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* About Section */
+.about-section {
+    padding: 8rem 0 5rem 0;
+    background-color: var(--primary-white);
+}
+
+.content-box {
+    background-color: var(--brand-purple);
+    border: 8px solid var(--black);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    box-shadow: 12px 12px 0 rgba(0, 0, 0, 1);
+}
+
+.section-title {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--black);
+}
+
+.section-title.center {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-text {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    color: var(--black);
+}
+
+/* Work Section */
+.work-section {
+    padding: 5rem 0;
+    background-color: var(--primary-white);
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+.project-card {
+    border: 8px solid var(--black);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 1);
+}
+
+.card-purple {
+    background-color: var(--brand-purple);
+}
+
+.card-yellow {
+    background-color: var(--brand-yellow);
+}
+
+.card-orange {
+    background-color: var(--accent-orange);
+}
+
+.card-purple-dark {
+    background-color: var(--brand-purple-dark);
+}
+
+.project-number {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 3rem;
+    opacity: 0.3;
+    margin-bottom: 1rem;
+}
+
+.project-title {
+    font-family: 'Dela Gothic One', cursive;
+    font-size: 1.875rem;
+    margin-bottom: 1rem;
+    color: var(--black);
+}
+
+.project-description {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: var(--black);
+}
+
+.project-tags {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background-color: var(--black);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 12rem 0 5rem 0;
+    background-color: var(--primary-white);
+}
+
+.contact-box {
+    background-color: var(--brand-yellow);
+    border: 8px solid var(--black);
+    border-radius: 1.5rem;
+    padding: 4rem 3rem;
+    text-align: center;
+    box-shadow: 12px 12px 0 rgba(0, 0, 0, 1);
+}
+
+.contact-text {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1.25rem;
+    margin-bottom: 2.5rem;
+    color: var(--black);
+}
+
+.contact-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.contact-btn {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    padding: 1rem 2.5rem;
+    border: 4px solid var(--black);
+    border-radius: 0.75rem;
+    text-decoration: none;
+    color: var(--black);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.contact-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 1);
+}
+
+.contact-btn:active {
+    transform: translate(0, 0);
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 1);
+}
+
+.btn-orange {
+    background-color: var(--accent-orange);
+}
+
+.btn-purple {
+    background-color: var(--brand-purple);
+}
+
+.btn-yellow {
+    background-color: var(--brand-yellow);
+}
+
+.btn-purple-dark {
+    background-color: var(--brand-purple-dark);
+}
+
+/* Footer */
+.footer {
+    background-color: var(--black);
+    color: var(--white);
+    padding: 3rem 2rem;
+    border-top: 8px solid var(--black);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-content p {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.footer-tagline {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+    }
+
+    .hamburger {
+        display: none;
+    }
+
+    .hero-title {
+        font-size: 7rem;
+    }
+
+    .hero-subtitle {
+        font-size: 2rem;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .box-purple {
+        width: 300px;
+        height: 300px;
+        left: -400px;
+    }
+
+    .box-yellow {
+        width: 250px;
+        height: 250px;
+        right: -350px;
+    }
+
+    .box-orange {
+        width: 280px;
+        height: 280px;
+        right: -300px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .section-title {
+        font-size: 3.5rem;
+    }
+
+    .contact-text {
+        font-size: 1.5rem;
+    }
+}
