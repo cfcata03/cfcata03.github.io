@@ -329,9 +329,13 @@ body {
     gap: 2rem;
 }
 
-a.project-card {
+a.project-card,
+a.project-card * {
     text-decoration: none;
     color: inherit;
+}
+
+a.project-card {
     display: block;
 }
 
