@@ -206,6 +206,7 @@ body {
 .hero-content {
     text-align: center;
     z-index: 2;
+    pointer-events: none;
 }
 
 .hero-title {
@@ -230,7 +231,6 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
-    pointer-events: none;
 }
 
 .decoration-box {
