@@ -62,6 +62,40 @@ document.querySelectorAll('.project-card').forEach(card => {
     observer.observe(card);
 });
 
+// Click-to-spin for hero decoration boxes
+document.querySelectorAll('.decoration-box').forEach(box => {
+    let spinning = false;
+
+    box.addEventListener('click', () => {
+        if (spinning) return;
+        spinning = true;
+
+        const scrolled = window.pageYOffset;
+        let speed = 0;
+        let baseRot = 0;
+
+        if (box.classList.contains('box-purple')) {
+            speed = -0.15;
+            baseRot = -15;
+        } else if (box.classList.contains('box-yellow')) {
+            speed = -0.2;
+            baseRot = 25;
+        } else if (box.classList.contains('box-orange')) {
+            speed = -0.18;
+            baseRot = 10;
+        }
+
+        box.classList.add('spinning');
+        box.style.transform = `translate(0, ${scrolled * speed}px) rotate(${baseRot + 360}deg)`;
+
+        setTimeout(() => {
+            box.classList.remove('spinning');
+            box.style.transform = `translate(0, ${scrolled * speed}px) rotate(${baseRot}deg)`;
+            spinning = false;
+        }, 800);
+    });
+});
+
 // Parallax effect for hero decoration boxes
 let ticking = false;
 
