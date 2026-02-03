@@ -329,6 +329,12 @@ body {
     gap: 2rem;
 }
 
+a.project-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 .project-card {
     border: 8px solid var(--black);
     border-radius: 1.5rem;
