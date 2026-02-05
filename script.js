@@ -183,3 +183,44 @@ window.addEventListener('scroll', () => {
         }
     });
 });
+
+// Typing animation
+const phrases = [
+    'Aspiring Engineer & Developer',
+    'Web Developer',
+    'Problem Solver',
+    'C++ Enthusiast'
+];
+const typedEl = document.getElementById('typed');
+let phraseIdx = 0;
+let charIdx = 0;
+let deleting = false;
+
+function type() {
+    const current = phrases[phraseIdx];
+
+    if (!deleting) {
+        typedEl.textContent = current.substring(0, charIdx + 1);
+        charIdx++;
+
+        if (charIdx === current.length) {
+            deleting = true;
+            setTimeout(type, 2000);
+            return;
+        }
+        setTimeout(type, 80);
+    } else {
+        typedEl.textContent = current.substring(0, charIdx - 1);
+        charIdx--;
+
+        if (charIdx === 0) {
+            deleting = false;
+            phraseIdx = (phraseIdx + 1) % phrases.length;
+            setTimeout(type, 400);
+            return;
+        }
+        setTimeout(type, 40);
+    }
+}
+
+type();
