@@ -95,6 +95,12 @@ body {
     box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
 }
 
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
 .nav-links {
     display: none;
     gap: 2rem;
@@ -569,6 +575,73 @@ a.project-card .tag {
 .footer-tagline {
     font-size: 0.75rem;
     opacity: 0.7;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    background-color: var(--brand-purple);
+    border: 4px solid var(--black);
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--black);
+}
+
+.theme-toggle:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 rgba(0, 0, 0, 1);
+}
+
+.theme-toggle:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
+}
+
+.theme-toggle .icon-sun {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+    display: block;
+}
+
+.mobile-theme-toggle {
+    margin-top: 1rem;
+    padding: 0.75rem;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    --primary-white: #1a1a2e;
+    --black: #eedfd0;
+    --white: #1a1a2e;
+}
+
+[data-theme="dark"] .footer {
+    background-color: #0d0d14;
+    color: #eedfd0;
+    border-top-color: #eedfd0;
+}
+
+[data-theme="dark"] .hero-title {
+    text-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .nav-logo {
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] a.project-card .tag {
+    color: #1a1a2e;
 }
 
 /* Responsive Design */
