@@ -189,7 +189,7 @@ const phrases = [
     'Aspiring Engineer & Developer',
     'Web Developer',
     'Problem Solver',
-    'C++ Enthusiast'
+    'Coding Enthusiast'
 ];
 const typedEl = document.getElementById('typed');
 let phraseIdx = 0;
