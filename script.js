@@ -224,3 +224,23 @@ function type() {
 }
 
 type();
+
+// Contact form handling
+const contactForm = document.getElementById('contactForm');
+
+contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+
+    // Create mailto link with form data
+    const mailtoLink = `mailto:calin.alexandru102@gmail.com?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`From: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+
+    // Open mail client
+    window.location.href = mailtoLink;
+
+    // Reset form
+    contactForm.reset();
+});

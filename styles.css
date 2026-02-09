@@ -436,6 +436,91 @@ a.project-card .tag { color: var(--white); }
 .btn-purple { background-color: var(--brand-purple); }
 .btn-yellow { background-color: var(--brand-yellow); }
 .btn-purple-dark { background-color: var(--brand-purple-dark); }
+.contact-divider {
+  margin: 3rem 0 2.5rem 0;
+  text-align: center;
+  position: relative;
+}
+.contact-divider::before,
+.contact-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 3px;
+  background-color: var(--black);
+}
+.contact-divider::before { left: 0; }
+.contact-divider::after { right: 0; }
+.contact-divider span {
+  font-family: 'Archivo', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--black);
+  background-color: var(--brand-yellow);
+  padding: 0.5rem 1rem;
+  border: 3px solid var(--black);
+  border-radius: 0.5rem;
+  position: relative;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+.form-group {
+  width: 100%;
+}
+.form-input {
+  width: 100%;
+  font-family: 'Archivo', sans-serif;
+  font-size: 1rem;
+  padding: 1rem 1.25rem;
+  border: 4px solid var(--black);
+  border-radius: 0.75rem;
+  background-color: var(--white);
+  color: var(--black);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+  transition: all 0.2s ease;
+}
+.form-input:focus {
+  outline: none;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 1);
+  background-color: var(--primary-white);
+}
+.form-input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+.form-submit {
+  font-family: 'Archivo', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: 1rem 2.5rem;
+  border: 4px solid var(--black);
+  border-radius: 0.75rem;
+  background-color: var(--brand-purple);
+  color: var(--black);
+  cursor: pointer;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+  transition: all 0.2s ease;
+  align-self: center;
+}
+.form-submit:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 1);
+}
+.form-submit:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
+}
 .footer {
   background-color: var(--black);
   color: var(--white);
