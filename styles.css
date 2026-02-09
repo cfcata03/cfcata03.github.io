@@ -140,6 +140,30 @@ body {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
 }
+.game-btn {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Archivo', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--black);
+  background-color: var(--brand-orange);
+  border: 4px solid var(--black);
+  border-radius: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.game-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 1);
+}
+.game-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
+}
 .resume-mobile {
   background-color: var(--brand-yellow);
   padding: 0.5rem 2rem;
@@ -786,10 +810,102 @@ a.project-card .tag { color: var(--white); }
 [data-theme="dark"] .loading-screen {
   background-color: var(--primary-white);
 }
+.game-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+.game-modal.active {
+  display: flex;
+}
+.game-container {
+  background-color: var(--primary-white);
+  border: 8px solid var(--black);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 12px 12px 0 rgba(0, 0, 0, 1);
+}
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.game-header h2 {
+  font-family: 'Dela Gothic One', cursive;
+  font-size: 2rem;
+  color: var(--black);
+  margin: 0;
+}
+.game-close {
+  font-family: 'Archivo', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  background-color: var(--accent-orange);
+  border: 4px solid var(--black);
+  border-radius: 0.5rem;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+.game-close:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 1);
+}
+.game-close:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
+}
+#gameCanvas {
+  border: 6px solid var(--black);
+  border-radius: 1rem;
+  display: block;
+  background-color: #87CEEB;
+}
+.game-info {
+  margin-top: 1rem;
+  text-align: center;
+}
+.game-score {
+  font-family: 'Archivo', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--black);
+  margin: 0.5rem 0;
+}
+.game-instruction {
+  font-family: 'Archivo', sans-serif;
+  font-size: 0.875rem;
+  color: var(--black);
+  margin: 0.5rem 0;
+}
+[data-theme="dark"] .game-container {
+  background-color: var(--primary-white);
+}
+[data-theme="dark"] .game-header h2,
+[data-theme="dark"] .game-score,
+[data-theme="dark"] .game-instruction {
+  color: var(--black);
+}
 @media (min-width: 768px) {
   .nav-links { display: flex; }
   .hamburger { display: none; }
   .resume-btn { display: flex; }
+  .game-btn { display: flex; }
   .contact-btn {
     font-size: 1.125rem;
     padding: 1rem 2.5rem;
