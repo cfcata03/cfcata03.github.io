@@ -1,3 +1,11 @@
+// Loading screen
+window.addEventListener('load', () => {
+    const loadingScreen = document.getElementById('loadingScreen');
+    setTimeout(() => {
+        loadingScreen.classList.add('hide');
+    }, 1000);
+});
+
 // Theme toggle
 const themeToggle = document.getElementById('themeToggle');
 const mobileThemeToggle = document.getElementById('mobileThemeToggle');
