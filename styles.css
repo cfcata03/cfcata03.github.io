@@ -117,7 +117,7 @@ body {
 .nav-link:hover { color: var(--brand-purple); }
 .nav-link:hover::after { width: 100%; }
 .resume-btn {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
   font-family: 'Archivo', sans-serif;
@@ -141,7 +141,7 @@ body {
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
 }
 .game-btn {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
   font-family: 'Archivo', sans-serif;
