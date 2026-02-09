@@ -189,7 +189,11 @@
                         <span>OR</span>
                     </div>
 
-                    <form class="contact-form" id="contactForm">
+                    <form class="contact-form" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                        <input type="hidden" name="access_key" value="b78b0f2f-90fc-4b08-9be2-b099818ef205">
+                        <input type="hidden" name="subject" value="New Contact from Portfolio">
+                        <input type="hidden" name="redirect" value="https://cfcata03.github.io/#contact">
+
                         <div class="form-group">
                             <input type="text" id="name" name="name" placeholder="Your Name" required class="form-input">
                         </div>
@@ -202,6 +206,7 @@
                         <button type="submit" class="form-submit">
                             <span>Send Message</span>
                         </button>
+                        <div class="form-response" id="formResponse"></div>
                     </form>
                 </div>
             </div>

@@ -521,6 +521,27 @@ a.project-card .tag { color: var(--white); }
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 1);
 }
+.form-response {
+  font-family: 'Archivo', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 1rem;
+  border: 3px solid var(--black);
+  border-radius: 0.75rem;
+  display: none;
+}
+.form-response.success {
+  display: block;
+  background-color: #90EE90;
+  color: var(--black);
+}
+.form-response.error {
+  display: block;
+  background-color: #FFB6C1;
+  color: var(--black);
+}
 .footer {
   background-color: var(--black);
   color: var(--white);

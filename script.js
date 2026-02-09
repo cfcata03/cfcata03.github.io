@@ -227,20 +227,44 @@ type();
 
 // Contact form handling
 const contactForm = document.getElementById('contactForm');
+const formResponse = document.getElementById('formResponse');
 
-contactForm.addEventListener('submit', (e) => {
+contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
+    const formData = new FormData(contactForm);
+    const submitBtn = contactForm.querySelector('.form-submit');
 
-    // Create mailto link with form data
-    const mailtoLink = `mailto:calin.alexandru102@gmail.com?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`From: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+    // Disable submit button
+    submitBtn.disabled = true;
+    submitBtn.querySelector('span').textContent = 'Sending...';
 
-    // Open mail client
-    window.location.href = mailtoLink;
+    try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        });
 
-    // Reset form
-    contactForm.reset();
+        const data = await response.json();
+
+        if (data.success) {
+            formResponse.textContent = 'Thanks! Your message has been sent successfully.';
+            formResponse.className = 'form-response success';
+            contactForm.reset();
+        } else {
+            throw new Error(data.message || 'Something went wrong');
+        }
+    } catch (error) {
+        formResponse.textContent = 'Oops! Something went wrong. Please try again or email me directly.';
+        formResponse.className = 'form-response error';
+    } finally {
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.querySelector('span').textContent = 'Send Message';
+
+        // Hide response message after 5 seconds
+        setTimeout(() => {
+            formResponse.style.display = 'none';
+        }, 5000);
+    }
 });
