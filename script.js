@@ -244,6 +244,21 @@ function type() {
 
 type();
 
+// Local time display
+function updateLocalTime() {
+    const timeEl = document.getElementById('localTime');
+    if (!timeEl) return;
+    timeEl.textContent = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/Bucharest',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    }).format(new Date());
+}
+updateLocalTime();
+setInterval(updateLocalTime, 1000);
+
 // Contact form handling
 const contactForm = document.getElementById('contactForm');
 const formResponse = document.getElementById('formResponse');
