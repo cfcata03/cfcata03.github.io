@@ -390,6 +390,20 @@ a.project-card .tag { color: var(--white); }
   margin-bottom: 1rem;
   color: var(--black);
 }
+
+.wip-badge {
+  font-family: 'Archivo', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  background: rgba(0,0,0,0.15);
+  color: inherit;
+  padding: 2px 7px;
+  border-radius: 4px;
+  vertical-align: middle;
+  position: relative;
+  top: -3px;
+}
 .project-description {
   font-family: 'Archivo', sans-serif;
   font-size: 1rem;
