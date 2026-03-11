@@ -1,1108 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alexandru Calin // Terminal</title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <style>
-/* ── Reset ─────────────────────────────────────────────── */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alexandru Calin — Brutalist</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#ffffff;--fg:#000000;--accent:#ffe500;--accent2:#ff3b00;
+  --border:3px solid #000;--font:'Space Grotesk',system-ui,sans-serif;
+}
+[data-theme="dark"]{--bg:#0a0a0a;--fg:#f0f0f0;--border:3px solid #f0f0f0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);overflow-x:hidden;transition:background .2s,color .2s;}
+a{color:inherit;text-decoration:none;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-thumb{background:var(--fg);}
 
-/* ── Tokens ─────────────────────────────────────────────── */
-:root {
-    --bg:       #0c0c0c;
-    --card-bg:  #0a1a0a;
-    --g:        #00ff41;       /* primary green */
-    --g-dim:    #006619;       /* muted green */
-    --g-lo:     rgba(0,255,65,.12);
-    --border:   rgba(0,255,65,.35);
-    --border-hi:rgba(0,255,65,.75);
-    --yellow:   #ffd700;
-    --orange:   #ff8c00;
-    --red:      #ff4444;
-    --white:    #ccffcc;
-    --gray:     #3a3a3a;
-    --font:     'JetBrains Mono', 'Courier New', monospace;
-    --glow:     0 0 8px var(--g), 0 0 2px var(--g);
-}
-[data-term="amber"] {
-    --g:         #ffb000;
-    --g-dim:     #7a5500;
-    --g-lo:      rgba(255,176,0,.12);
-    --border:    rgba(255,176,0,.35);
-    --border-hi: rgba(255,176,0,.75);
-    --card-bg:   #141000;
-    --white:     #fff8e7;
-    --glow:      0 0 8px var(--g), 0 0 2px var(--g);
-}
+/* LOADING */
+#loadingScreen{position:fixed;inset:0;background:var(--accent);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .3s,visibility .3s;}
+#loadingScreen.hide{opacity:0;visibility:hidden;}
+.load-text{font-size:4rem;font-weight:700;color:#000;letter-spacing:-.05em;animation:load-blink .5s step-end infinite;}
+@keyframes load-blink{50%{opacity:0;}}
 
-/* ── Scanlines overlay ──────────────────────────────────── */
-body::after {
-    content: '';
-    position: fixed; inset: 0;
-    background: repeating-linear-gradient(
-        0deg, transparent, transparent 3px,
-        rgba(0,0,0,.06) 3px, rgba(0,0,0,.06) 4px
-    );
-    pointer-events: none;
-    z-index: 9999;
-}
+/* GAME MODAL */
+.game-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:10000;}
+.game-modal.active{display:flex;}
+.game-container{border:var(--border);background:var(--bg);}
+.game-header{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;border-bottom:var(--border);}
+.game-header h2{font-weight:700;font-size:.9rem;text-transform:uppercase;letter-spacing:.08em;}
+.game-close{background:var(--accent2);border:2px solid #000;color:#fff;font-weight:700;width:28px;height:28px;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;}
+#gameCanvas{display:block;}
+.game-info{padding:.5rem 1rem;border-top:var(--border);display:flex;justify-content:space-between;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
 
-/* ── Base ───────────────────────────────────────────────── */
-html { scroll-behavior: smooth; }
-body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--g);
-    line-height: 1.7;
-    overflow-x: hidden;
-}
+/* NAVBAR */
+.navbar{position:sticky;top:0;z-index:1000;background:var(--bg);border-bottom:var(--border);}
+.nav-content{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:stretch;min-height:56px;}
+.nav-logo{font-size:1.1rem;font-weight:700;letter-spacing:-.03em;text-transform:uppercase;padding:0 1.5rem;display:flex;align-items:center;border-right:var(--border);}
+.nav-logo span{background:var(--accent);color:#000;padding:0 .2rem;}
+.nav-links{display:flex;align-items:stretch;}
+.nav-link{font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:0 1.25rem;display:flex;align-items:center;border-right:var(--border);transition:background .15s,color .15s;}
+.nav-link:hover,.nav-link.active{background:var(--fg);color:var(--bg);}
+.nav-right{margin-left:auto;display:flex;align-items:stretch;}
+.btn-nav{font-family:var(--font);font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;border-left:var(--border);color:var(--fg);padding:0 1.25rem;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:background .15s,color .15s;}
+.btn-nav:hover{background:var(--fg);color:var(--bg);}
+.btn-nav.btn-primary{background:var(--accent);color:#000;}
+.btn-nav.btn-primary:hover{background:#000;color:var(--accent);}
+.icon-sun{display:none;}
+[data-theme="dark"] .icon-moon{display:none;}
+[data-theme="dark"] .icon-sun{display:block;}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.5rem;}
+.hamburger span{width:22px;height:2.5px;background:var(--fg);}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,7px);}
+.hamburger.active span:nth-child(2){opacity:0;}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-7px);}
+.mobile-menu{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s;border-left:var(--border);}
+.mobile-menu.active{transform:translateX(0);}
+.mobile-link{font-size:2.5rem;font-weight:700;letter-spacing:-.04em;padding:1.25rem 2rem;border-bottom:var(--border);}
+.mobile-link:hover{background:var(--accent);color:#000;}
 
-/* ── Scrollbar ──────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--g-dim); border-radius: 3px; }
+/* HERO */
+.hero{min-height:90vh;display:flex;flex-direction:column;justify-content:flex-end;padding:4rem 2rem;border-bottom:var(--border);position:relative;overflow:hidden;}
+.hero-bg-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(15rem,35vw,35rem);font-weight:700;color:transparent;-webkit-text-stroke:2px rgba(0,0,0,.06);pointer-events:none;line-height:1;user-select:none;}
+[data-theme="dark"] .hero-bg-num{-webkit-text-stroke:2px rgba(255,255,255,.04);}
+.hero-label{font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--accent);color:#000;display:inline-block;padding:.2rem .75rem;margin-bottom:1.5rem;}
+.hero-name{font-size:clamp(4rem,12vw,10rem);font-weight:700;letter-spacing:-.05em;line-height:.9;margin-bottom:2rem;}
+.hero-name em{font-style:normal;display:block;-webkit-text-stroke:1.5px var(--fg);color:transparent;}
+[data-theme="dark"] .hero-name em{color:transparent;}
+.hero-sub{font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:500;border-top:var(--border);padding-top:1.5rem;max-width:600px;}
+#typed{border-bottom:2px solid var(--accent2);}
+.cursor{color:var(--accent2);animation:blink .7s step-end infinite;}
+@keyframes blink{50%{opacity:0;}}
+.hero-actions{display:flex;gap:0;margin-top:2rem;flex-wrap:wrap;}
+.btn{font-family:var(--font);font-size:.85rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.8rem 2rem;border:var(--border);cursor:pointer;transition:background .15s,color .15s;display:inline-flex;align-items:center;gap:.5rem;}
+.btn-solid{background:var(--fg);color:var(--bg);}
+.btn-solid:hover{background:var(--accent);color:#000;border-color:#000;}
+.btn-outline{background:transparent;color:var(--fg);}
+.btn-outline:hover{background:var(--fg);color:var(--bg);}
 
-/* ══════════════════════════════════════════════════════════
-   LOADING SCREEN
-══════════════════════════════════════════════════════════ */
-#loadingScreen {
-    position: fixed; inset: 0;
-    background: var(--bg);
-    display: flex; flex-direction: column;
-    align-items: flex-start; justify-content: center;
-    padding: 2rem 3rem;
-    z-index: 9998;
-    transition: opacity .5s ease, visibility .5s ease;
-    font-size: .85rem;
-}
-#loadingScreen.hide { opacity: 0; visibility: hidden; }
-#boot-lines { display: flex; flex-direction: column; gap: .3rem; max-width: 500px; }
-#boot-lines .line { display: flex; gap: 1rem; white-space: nowrap; }
-#boot-lines .label { color: var(--g); }
-#boot-lines .status-ok  { color: #00ff41; margin-left: auto; }
-#boot-lines .status-run { color: var(--yellow); margin-left: auto; }
-.boot-header { color: var(--g); font-size: 1.1rem; font-weight: 700; margin-bottom: .75rem;
-    text-shadow: var(--glow); }
-.boot-divider { color: var(--g-dim); margin-bottom: 1rem; }
-#bootProgress { margin-top: 1.25rem; color: var(--g); letter-spacing: .05em; }
-#bootBar { color: var(--g); font-size: .9rem; }
+/* SECTIONS */
+.section-container{max-width:1400px;margin:0 auto;padding:0 2rem;}
+.section-num{font-size:clamp(5rem,10vw,8rem);font-weight:700;line-height:1;border-bottom:var(--border);padding-bottom:.5rem;margin-bottom:1.5rem;display:flex;align-items:baseline;gap:1.5rem;}
+.section-num-label{font-size:1rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--fg);opacity:.5;}
+section{border-bottom:var(--border);}
 
-/* ══════════════════════════════════════════════════════════
-   GAME MODAL
-══════════════════════════════════════════════════════════ */
-.game-modal {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,.92);
-    display: none; align-items: center; justify-content: center;
-    z-index: 10000;
-}
-.game-modal.active { display: flex; }
-.game-container {
-    background: var(--card-bg);
-    border: 1px solid var(--border-hi);
-    border-radius: 6px;
-    padding: 0;
-    box-shadow: 0 0 40px rgba(0,255,65,.2), inset 0 0 40px rgba(0,0,0,.5);
-    overflow: hidden;
-}
-.game-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: .6rem 1rem;
-    background: var(--g-lo);
-    border-bottom: 1px solid var(--border);
-}
-.game-header h2 {
-    font-size: .9rem; font-weight: 600; color: var(--g);
-    font-family: var(--font);
-    letter-spacing: .1em;
-}
-.game-header h2::before { content: '[ '; color: var(--g-dim); }
-.game-header h2::after  { content: ' ]'; color: var(--g-dim); }
-.game-close {
-    font-family: var(--font); font-size: 1rem; font-weight: 700;
-    background: transparent; border: 1px solid var(--red);
-    color: var(--red); border-radius: 3px;
-    width: 26px; height: 26px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all .2s;
-}
-.game-close:hover { background: var(--red); color: #000; }
-#gameCanvas {
-    border: none; border-top: 1px solid var(--border);
-    display: block; background: #87CEEB;
-}
-.game-info { padding: .75rem 1rem; background: var(--g-lo); border-top: 1px solid var(--border); }
-.game-score {
-    font-family: var(--font); font-size: 1rem; font-weight: 700;
-    color: var(--g); margin: 0;
-}
-.game-score::before { content: '> score: '; color: var(--g-dim); }
-.game-instruction { font-family: var(--font); font-size: .75rem; color: var(--g-dim); margin: .25rem 0 0; }
+/* ABOUT */
+.about-section{padding:5rem 0;}
+.about-grid{display:grid;gap:2rem;}
+.about-block{border:var(--border);padding:2rem;}
+.about-block p{font-size:1.05rem;line-height:1.8;margin-bottom:.75rem;}
+.about-block p:last-child{margin-bottom:0;}
+.about-block strong{background:var(--accent);color:#000;padding:0 .2rem;}
 
-/* ══════════════════════════════════════════════════════════
-   NAVBAR
-══════════════════════════════════════════════════════════ */
-.navbar {
-    position: sticky; top: 0; z-index: 1000;
-    background: rgba(12,12,12,.95);
-    border-bottom: 1px solid var(--border);
-    padding: .65rem 1.5rem;
-    backdrop-filter: blur(4px);
-}
-.nav-content {
-    max-width: 1400px; margin: 0 auto;
-    display: flex; justify-content: space-between; align-items: center;
-    position: relative;
-}
-.nav-logo {
-    font-weight: 700; font-size: 1.1rem;
-    color: var(--g); text-shadow: var(--glow);
-    letter-spacing: .05em;
-}
-.nav-logo::before { content: '[ '; color: var(--g-dim); }
-.nav-logo::after  { content: ' ]'; color: var(--g-dim); }
-.nav-links {
-    display: none; gap: 1.75rem;
-    position: absolute; left: 50%; transform: translateX(-50%);
-}
-.nav-link {
-    font-size: .85rem; font-weight: 600; color: var(--g-dim);
-    text-decoration: none; transition: color .2s;
-    letter-spacing: .05em;
-}
-.nav-link::before { content: './'; color: var(--g-dim); transition: color .2s; }
-.nav-link:hover { color: var(--g); text-shadow: var(--glow); }
-.nav-link:hover::before { color: var(--g); }
-.nav-link.active { color: var(--g); }
-.nav-link.active::before { color: var(--g); }
-.nav-right { display: flex; align-items: center; gap: .6rem; }
-.resume-btn, .game-btn, .theme-toggle {
-    font-family: var(--font); font-size: .8rem; font-weight: 600;
-    background: transparent; border: 1px solid var(--border);
-    color: var(--g); border-radius: 3px;
-    padding: .4rem .65rem; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: .35rem;
-    text-decoration: none; transition: all .2s;
-}
-.resume-btn:hover, .game-btn:hover, .theme-toggle:hover {
-    border-color: var(--g); background: var(--g-lo);
-    box-shadow: var(--glow);
-}
-.resume-btn::before { content: '['; color: var(--g-dim); margin-right: .15rem; }
-.resume-btn::after  { content: ']'; color: var(--g-dim); margin-left: .15rem; }
-.icon-sun { display: none; }
-[data-term="amber"] .icon-moon { display: none; }
-[data-term="amber"] .icon-sun  { display: block; }
+/* SKILLS */
+.skills-section{padding:5rem 0;}
+.skills-grid{display:grid;grid-template-columns:1fr;gap:0;border-top:var(--border);}
+.skill-card{border-bottom:var(--border);padding:2rem;display:grid;grid-template-columns:200px 1fr;gap:2rem;align-items:start;}
+.skill-card:last-child{border-bottom:none;}
+.skill-name{font-size:1.5rem;font-weight:700;letter-spacing:-.03em;}
+.skill-tags{display:flex;flex-wrap:wrap;gap:.5rem;}
+.tag{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.3rem .8rem;border:2px solid var(--fg);background:transparent;color:var(--fg);transition:all .15s;cursor:default;}
+.tag:hover{background:var(--fg);color:var(--bg);}
 
-.hamburger {
-    display: flex; flex-direction: column; gap: 5px;
-    background: none; border: none; cursor: pointer; padding: .4rem;
-}
-.hamburger span {
-    width: 22px; height: 2px; background: var(--g);
-    transition: all .3s;
-    box-shadow: 0 0 4px var(--g);
-}
-.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(7px,7px); }
-.hamburger.active span:nth-child(2) { opacity: 0; }
-.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px,-7px); }
+/* WORK */
+.work-section{padding:5rem 0;}
+.projects-grid{display:grid;grid-template-columns:1fr;border-top:var(--border);}
+a.project-card{display:block;border-bottom:var(--border);padding:2.5rem 2rem;position:relative;transition:background .15s;}
+a.project-card:hover{background:var(--accent);color:#000;}
+[data-theme="dark"] a.project-card:hover{background:var(--accent);color:#000;}
+.project-meta{display:flex;align-items:baseline;gap:1rem;margin-bottom:.5rem;}
+.project-num{font-size:3rem;font-weight:700;line-height:1;letter-spacing:-.04em;opacity:.25;}
+.project-title{font-size:1.75rem;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:.75rem;}
+.wip-badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#000;color:var(--accent);padding:2px 8px;position:relative;top:-4px;}
+a.project-card:hover .wip-badge{background:var(--accent2);color:#fff;}
+.project-description{font-size:.95rem;line-height:1.7;max-width:700px;margin-bottom:1rem;opacity:.75;}
+.project-tags .tag{border-color:currentColor;}
+.project-arrow{position:absolute;top:2.5rem;right:2rem;font-size:2rem;font-weight:700;transition:transform .2s;}
+a.project-card:hover .project-arrow{transform:translate(4px,-4px);}
 
-/* ── Mobile menu ── */
-.mobile-menu {
-    position: fixed; inset: 0;
-    background: rgba(12,12,12,.97);
-    border-left: 1px solid var(--border);
-    transform: translateX(100%);
-    transition: transform .3s ease;
-    z-index: 999;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center; gap: 2rem;
-}
-.mobile-menu.active { transform: translateX(0); }
-.mobile-link {
-    font-size: 1.5rem; font-weight: 700; color: var(--g-dim);
-    text-decoration: none; transition: all .2s; letter-spacing: .1em;
-}
-.mobile-link::before { content: '> ./'; color: var(--g-dim); }
-.mobile-link:hover { color: var(--g); text-shadow: var(--glow); }
-.mobile-theme-toggle { margin-top: 1rem; }
+/* CONTACT */
+.contact-section{padding:5rem 0;}
+.contact-grid{display:grid;gap:0;border-top:var(--border);}
+.contact-block{border-bottom:var(--border);padding:2.5rem 2rem;}
+.contact-heading{font-size:2.5rem;font-weight:700;letter-spacing:-.05em;margin-bottom:.75rem;}
+.contact-sub{font-size:1rem;max-width:500px;line-height:1.7;margin-bottom:2rem;opacity:.65;}
+.local-time{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:2px solid var(--fg);display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;margin-bottom:1.75rem;}
+.local-time-dot{width:8px;height:8px;background:var(--accent2);flex-shrink:0;}
+.contact-links{display:flex;gap:.5rem;flex-wrap:wrap;}
+.contact-btn{font-family:var(--font);font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem 1.25rem;border:2px solid var(--fg);transition:all .15s;}
+.contact-btn:hover{background:var(--fg);color:var(--bg);}
+.contact-form{display:flex;flex-direction:column;gap:.75rem;}
+.form-group{display:flex;flex-direction:column;gap:.3rem;}
+.form-label{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+.form-input{font-family:var(--font);font-size:.95rem;padding:.7rem 1rem;background:var(--bg);color:var(--fg);border:2px solid var(--fg);transition:border-color .15s;width:100%;}
+.form-input:focus{outline:none;border-color:var(--accent2);}
+.form-input::placeholder{opacity:.4;}
+.form-textarea{resize:vertical;min-height:100px;}
+.form-submit{font-family:var(--font);font-size:.85rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.85rem 2.5rem;background:var(--fg);color:var(--bg);border:2px solid var(--fg);cursor:pointer;align-self:flex-start;transition:background .15s,color .15s;}
+.form-submit:hover{background:var(--accent2);border-color:var(--accent2);color:#fff;}
+.form-response{font-size:.85rem;font-weight:700;padding:.6rem .9rem;display:none;}
+.form-response.success{display:block;background:var(--accent);color:#000;}
+.form-response.error{display:block;background:var(--accent2);color:#fff;}
 
-/* ══════════════════════════════════════════════════════════
-   HERO
-══════════════════════════════════════════════════════════ */
-.hero {
-    min-height: 90vh;
-    display: flex; align-items: center; justify-content: center;
-    padding: 4rem 2rem;
-    position: relative;
-}
-.term-window {
-    border: 1px solid var(--border-hi);
-    border-radius: 6px;
-    overflow: hidden;
-    background: var(--card-bg);
-    box-shadow: 0 0 60px rgba(0,255,65,.08), inset 0 0 40px rgba(0,0,0,.3);
-    width: 100%; max-width: 700px;
-}
-.term-titlebar {
-    display: flex; align-items: center; gap: .5rem;
-    padding: .5rem 1rem;
-    background: var(--g-lo);
-    border-bottom: 1px solid var(--border);
-}
-.term-dot { width: 11px; height: 11px; border-radius: 50%; }
-.dot-red    { background: #ff5f57; }
-.dot-yellow { background: #febc2e; }
-.dot-green  { background: #28c840; }
-.term-title {
-    margin-left: .5rem; font-size: .75rem; color: var(--g-dim); letter-spacing: .05em;
-}
-.term-body { padding: 2rem 2rem 2.5rem; }
-.term-prompt { color: var(--g-dim); font-size: .9rem; margin-bottom: .3rem; }
-.term-prompt .user  { color: var(--g); font-weight: 700; }
-.term-prompt .at    { color: var(--g-dim); }
-.term-prompt .dir   { color: var(--yellow); }
-.term-prompt .dollar { color: var(--g); }
-.term-output-name {
-    font-size: clamp(2rem, 7vw, 4.5rem); font-weight: 700;
-    color: var(--g); line-height: 1.05;
-    text-shadow: var(--glow);
-    letter-spacing: -.02em;
-    margin-bottom: 1.5rem;
-}
-.hero-subtitle-line {
-    font-size: .9rem; color: var(--g-dim); margin-bottom: .3rem;
-}
-.hero-typed-line {
-    font-size: clamp(.95rem, 2vw, 1.15rem); color: var(--g);
-    font-weight: 600; min-height: 1.7em;
-}
-#typed { }
-.cursor { animation: blink .7s step-end infinite; }
-@keyframes blink { 50% { opacity: 0; } }
+/* FOOTER */
+.footer{background:var(--fg);color:var(--bg);padding:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-logo{font-size:1.5rem;font-weight:700;letter-spacing:-.04em;}
+.footer-logo span{color:var(--accent);}
+.footer-line{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.5;}
 
-/* ══════════════════════════════════════════════════════════
-   SECTIONS SHARED
-══════════════════════════════════════════════════════════ */
-section { padding: 5rem 0; }
-.section-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-.section-cmd {
-    font-size: .9rem; color: var(--g-dim); margin-bottom: 1.25rem;
+@media(min-width:768px){
+  .skills-grid{grid-template-columns:1fr 1fr 1fr;}
+  .skills-grid .skill-card{grid-template-columns:1fr;border-right:var(--border);}
+  .skills-grid .skill-card:last-child{border-right:none;}
+  .projects-grid{grid-template-columns:1fr 1fr;}
+  a.project-card:nth-child(odd){border-right:var(--border);}
+  .contact-grid{grid-template-columns:1fr 1fr;}
+  .contact-block{border-bottom:none;border-right:var(--border);}
+  .contact-block:last-child{border-right:none;}
+  .nav-links{display:flex;}
+  .hamburger{display:none;}
 }
-.section-cmd .user  { color: var(--g); font-weight: 700; }
-.section-cmd .dir   { color: var(--yellow); }
-.section-cmd .dollar { color: var(--g); }
-.section-cmd .cmd   { color: var(--white); }
-.section-title {
-    font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 700;
-    color: var(--g); margin-bottom: 2.5rem; letter-spacing: .05em;
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .btn-nav.btn-primary{display:none;}
 }
-.section-title::before { content: '# '; color: var(--g-dim); }
-.section-title.center { text-align: center; margin-bottom: 3rem; }
-
-/* ── About ─────────────────────────────────────────────── */
-.about-section { padding: 7rem 0 5rem; }
-.about-box {
-    border: 1px solid var(--border);
-    border-radius: 6px; overflow: hidden;
-    background: var(--card-bg);
-}
-.about-box .term-titlebar { }
-.about-body { padding: 2.5rem 3rem; }
-.about-text {
-    font-size: 1rem; line-height: 1.9; color: var(--white);
-    margin-bottom: 1rem;
-}
-.about-text:last-child { margin-bottom: 0; }
-.about-text .comment { color: var(--g-dim); font-style: italic; }
-
-/* ── Skills ─────────────────────────────────────────────── */
-.skills-grid {
-    display: grid; grid-template-columns: 1fr; gap: 1.5rem;
-}
-.skill-category {
-    border: 1px solid var(--border);
-    border-radius: 6px; overflow: hidden;
-    background: var(--card-bg);
-    transition: border-color .3s, box-shadow .3s;
-}
-.skill-category:hover {
-    border-color: var(--border-hi);
-    box-shadow: 0 0 20px var(--g-lo);
-}
-.skill-category .term-titlebar { }
-.skill-body { padding: 1.5rem 2rem; }
-.skill-cmd { font-size: .8rem; color: var(--g-dim); margin-bottom: 1rem; }
-.skill-cmd .cmd { color: var(--white); }
-.skill-tags { display: flex; flex-wrap: wrap; gap: .6rem; }
-.tag {
-    font-family: var(--font); font-size: .8rem; font-weight: 600;
-    background: var(--g-lo); color: var(--g);
-    border: 1px solid var(--border); border-radius: 3px;
-    padding: .3rem .75rem; transition: all .2s;
-}
-.tag:hover {
-    background: var(--g-dim); color: #000;
-    border-color: var(--g);
-}
-
-/* ── Work ───────────────────────────────────────────────── */
-.projects-grid {
-    display: grid; grid-template-columns: 1fr; gap: 1.5rem;
-}
-a.project-card {
-    text-decoration: none; color: inherit;
-    border: 1px solid var(--border);
-    border-radius: 6px; overflow: hidden;
-    background: var(--card-bg);
-    display: block;
-    transition: border-color .3s, box-shadow .3s, transform .3s;
-}
-a.project-card:hover {
-    border-color: var(--border-hi);
-    box-shadow: 0 0 30px var(--g-lo);
-    transform: translateY(-2px);
-}
-.project-card .term-titlebar { }
-.project-body { padding: 1.5rem 2rem 2rem; }
-.project-number {
-    font-size: .75rem; color: var(--g-dim); margin-bottom: .5rem;
-    letter-spacing: .1em;
-}
-.project-title {
-    font-size: 1.2rem; font-weight: 700; color: var(--g);
-    margin-bottom: .75rem; text-shadow: 0 0 6px var(--g);
-    letter-spacing: .03em;
-}
-.wip-badge {
-    font-size: .65rem; font-weight: 700; letter-spacing: .1em;
-    background: transparent; color: var(--yellow);
-    border: 1px solid var(--yellow); border-radius: 3px;
-    padding: 1px 6px; vertical-align: middle; position: relative; top: -2px;
-}
-.project-description {
-    font-size: .875rem; line-height: 1.75; color: var(--white);
-    margin-bottom: 1.25rem; opacity: .85;
-}
-.project-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
-.project-card .tag { font-size: .75rem; }
-
-/* ── Contact ────────────────────────────────────────────── */
-.contact-section { padding: 10rem 0 5rem; }
-.contact-box {
-    border: 1px solid var(--border-hi);
-    border-radius: 6px; overflow: hidden;
-    background: var(--card-bg);
-    box-shadow: 0 0 60px var(--g-lo);
-}
-.contact-body { padding: 2.5rem 3rem; text-align: center; }
-.contact-text { font-size: 1rem; color: var(--white); margin-bottom: 2rem; opacity: .8; }
-.local-time {
-    display: inline-flex; align-items: center; gap: .5rem;
-    font-size: .8rem; font-weight: 600;
-    background: var(--g-lo); border: 1px solid var(--border); border-radius: 3px;
-    padding: .35rem .9rem; margin-bottom: 2rem; color: var(--g);
-}
-.local-time-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: #4ade80; border: 1px solid var(--g);
-    flex-shrink: 0; animation: pulse-dot 2s ease-in-out infinite;
-}
-@keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:.3; } }
-.contact-links { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-bottom: 0; }
-.contact-btn {
-    font-family: var(--font); font-size: .85rem; font-weight: 600;
-    padding: .55rem 1.25rem; border: 1px solid var(--border);
-    border-radius: 3px; text-decoration: none; color: var(--g);
-    background: transparent; transition: all .2s; display: inline-block;
-}
-.contact-btn::before { content: '[ '; color: var(--g-dim); }
-.contact-btn::after  { content: ' ]'; color: var(--g-dim); }
-.contact-btn:hover { border-color: var(--g); background: var(--g-lo); box-shadow: var(--glow); }
-.contact-separator { width: 100%; height: 1px; background: var(--border); margin: 2.5rem 0; }
-.contact-form { display: flex; flex-direction: column; gap: 1.25rem; max-width: 560px; margin: 0 auto; }
-.form-group { width: 100%; text-align: left; }
-.form-label { font-size: .75rem; color: var(--g-dim); display: block; margin-bottom: .4rem; }
-.form-label::before { content: '> '; color: var(--g); }
-.form-input {
-    width: 100%; font-family: var(--font); font-size: .9rem;
-    padding: .75rem 1rem; background: #050f05; color: var(--g);
-    border: 1px solid var(--border); border-radius: 3px;
-    transition: all .2s; caret-color: var(--g);
-}
-.form-input:focus { outline: none; border-color: var(--g); box-shadow: var(--glow); background: #071007; }
-.form-input::placeholder { color: var(--g-dim); opacity: .6; }
-.form-textarea { resize: vertical; min-height: 110px; }
-.form-submit {
-    font-family: var(--font); font-size: .95rem; font-weight: 700;
-    padding: .75rem 2rem; border: 1px solid var(--g); border-radius: 3px;
-    background: var(--g-lo); color: var(--g); cursor: pointer;
-    transition: all .2s; align-self: center; letter-spacing: .05em;
-}
-.form-submit::before { content: '$ '; color: var(--g-dim); }
-.form-submit:hover { background: var(--g); color: #000; box-shadow: var(--glow); }
-.form-response {
-    font-family: var(--font); font-size: .85rem; font-weight: 600;
-    padding: .75rem 1rem; border: 1px solid var(--border); border-radius: 3px;
-    display: none; text-align: left;
-}
-.form-response.success { display: block; border-color: var(--g); color: var(--g); }
-.form-response.success::before { content: '[  OK ] '; }
-.form-response.error { display: block; border-color: var(--red); color: var(--red); }
-.form-response.error::before { content: '[ ERR ] '; }
-
-/* ── Footer ─────────────────────────────────────────────── */
-.footer {
-    background: var(--bg); border-top: 1px solid var(--border);
-    padding: 2rem; color: var(--g-dim); font-size: .75rem; text-align: center;
-}
-.footer-line::before { content: '# '; color: var(--gray); }
-.footer-tagline { margin-top: .3rem; color: var(--gray); }
-.footer-tagline::before { content: '// '; }
-
-/* ── Media queries ──────────────────────────────────────── */
-@media (min-width: 640px) {
-    .nav-links { display: flex; }
-    .hamburger { display: none; }
-}
-@media (min-width: 768px) {
-    .skills-grid { grid-template-columns: repeat(3, 1fr); }
-    .projects-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 640px) {
-    .resume-btn, .game-btn { display: none; }
-    .hamburger { display: flex; }
-}
-    </style>
+</style>
 </head>
 <body>
+<div id="loadingScreen"><div class="load-text">AC</div></div>
 
-<!-- ── Loading screen ──────────────────────────────── -->
-<div id="loadingScreen">
-    <div class="boot-header">PORTFOLIO_OS v2.0.26 — Alexandru Calin</div>
-    <div class="boot-divider">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-    <div id="boot-lines"></div>
-    <div id="bootProgress"></div>
-</div>
-
-<!-- ── Game modal ──────────────────────────────────── -->
 <div class="game-modal" id="gameModal">
-    <div class="game-container">
-        <div class="game-header">
-            <div class="term-dot dot-red" style="cursor:pointer" id="gameClose"></div>
-            <div class="term-dot dot-yellow" style="margin-left:.25rem"></div>
-            <div class="term-dot dot-green"  style="margin-left:.25rem"></div>
-            <h2 style="margin-left:.75rem">Flappy AC</h2>
-        </div>
-        <canvas id="gameCanvas" width="400" height="500"></canvas>
-        <div class="game-info">
-            <p class="game-score"><span id="gameScore">0</span></p>
-            <p class="game-instruction">click or space to flap</p>
-        </div>
-    </div>
+  <div class="game-container">
+    <div class="game-header"><h2>Flappy AC</h2><button class="game-close" id="gameClose">✕</button></div>
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+    <div class="game-info"><span>SCORE: <span id="gameScore">0</span></span><span>CLICK / SPACE</span></div>
+  </div>
 </div>
 
-<!-- ── Navbar ──────────────────────────────────────── -->
 <nav class="navbar">
-    <div class="nav-content">
-        <div class="nav-logo">AC</div>
-        <div class="nav-links">
-            <a href="#about"   class="nav-link">about</a>
-            <a href="#skills"  class="nav-link">skills</a>
-            <a href="#work"    class="nav-link">work</a>
-            <a href="#contact" class="nav-link">contact</a>
-        </div>
-        <div class="nav-right">
-            <a href="CV_AlexandruCalin.pdf" download class="resume-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                cv
-            </a>
-            <button class="game-btn" id="gameBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                play
-            </button>
-            <button class="theme-toggle" id="themeToggle" aria-label="Toggle terminal theme" title="green / amber">
-                <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            </button>
-            <button class="hamburger" id="hamburger">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
+  <div class="nav-content">
+    <div class="nav-logo">A<span>C</span></div>
+    <div class="nav-links">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#work" class="nav-link">Work</a>
+      <a href="#contact" class="nav-link">Contact</a>
     </div>
+    <div class="nav-right">
+      <a href="CV_AlexandruCalin.pdf" download class="btn-nav btn-primary">↓ CV</a>
+      <button class="btn-nav" id="gameBtn">▶ Play</button>
+      <button class="btn-nav" id="themeToggle">
+        <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
 </nav>
 
-<!-- ── Mobile menu ─────────────────────────────────── -->
 <div class="mobile-menu" id="mobileMenu">
-    <a href="#about"   class="mobile-link">about</a>
-    <a href="#skills"  class="mobile-link">skills</a>
-    <a href="#work"    class="mobile-link">work</a>
-    <a href="#contact" class="mobile-link">contact</a>
-    <button class="theme-toggle mobile-theme-toggle" id="mobileThemeToggle">
-        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        <svg class="icon-sun"  xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
+  <a href="#about" class="mobile-link">About</a>
+  <a href="#skills" class="mobile-link">Skills</a>
+  <a href="#work" class="mobile-link">Work</a>
+  <a href="#contact" class="mobile-link">Contact</a>
 </div>
 
 <main>
-
-<!-- ── Hero ────────────────────────────────────────── -->
 <section class="hero">
-    <div class="term-window">
-        <div class="term-titlebar">
-            <div class="term-dot dot-red"></div>
-            <div class="term-dot dot-yellow"></div>
-            <div class="term-dot dot-green"></div>
-            <span class="term-title">ac@portfolio: ~</span>
-        </div>
-        <div class="term-body">
-            <p class="term-prompt"><span class="user">ac</span><span class="at">@</span><span class="user">portfolio</span><span class="at">:</span><span class="dir">~</span><span class="dollar"> $ </span>whoami</p>
-            <div class="term-output-name">Alexandru<br>Calin</div>
-            <p class="term-prompt"><span class="user">ac</span><span class="at">@</span><span class="user">portfolio</span><span class="at">:</span><span class="dir">~</span><span class="dollar"> $ </span>echo $ROLE</p>
-            <p class="hero-typed-line"><span id="typed"></span><span class="cursor">▋</span></p>
-        </div>
+  <div class="hero-bg-num">AC</div>
+  <div class="section-container">
+    <div class="hero-label">Available for opportunities</div>
+    <h1 class="hero-name">Alexandru<em>Calin</em></h1>
+    <p class="hero-sub"><span id="typed"></span><span class="cursor">_</span></p>
+    <div class="hero-actions">
+      <a href="#work" class="btn btn-solid">View Work →</a>
+      <a href="CV_AlexandruCalin.pdf" download class="btn btn-outline">↓ Download CV</a>
     </div>
+  </div>
 </section>
 
-<!-- ── About ───────────────────────────────────────── -->
 <section id="about" class="about-section">
-    <div class="section-container">
-        <p class="section-cmd">
-            <span class="user">ac</span>@<span class="user">portfolio</span>:<span class="dir">~</span><span class="dollar"> $ </span><span class="cmd">cat ./about.md</span>
-        </p>
-        <div class="about-box">
-            <div class="term-titlebar">
-                <div class="term-dot dot-red"></div>
-                <div class="term-dot dot-yellow"></div>
-                <div class="term-dot dot-green"></div>
-                <span class="term-title">about.md</span>
-            </div>
-            <div class="about-body">
-                <h2 class="section-title">About Me</h2>
-                <p class="about-text">Engineering student at Polytechnic University of Bucharest passionate about web &amp; software development.</p>
-                <p class="about-text">Proficient in Python, C++/C/C#, and web technologies (HTML/CSS). I build practical projects and continuously explore new technologies, focusing on applying my skills to create real-world solutions.</p>
-            </div>
-        </div>
+  <div class="section-container">
+    <div class="section-num">01 <span class="section-num-label">About</span></div>
+    <div class="about-grid">
+      <div class="about-block">
+        <p>Engineering student at <strong>Polytechnic University of Bucharest</strong> passionate about web &amp; software development.</p>
+        <p>Proficient in Python, C++/C/C#, and web technologies. I build practical projects and continuously explore new technologies, focusing on applying my skills to create real-world solutions.</p>
+      </div>
     </div>
+  </div>
 </section>
 
-<!-- ── Skills ──────────────────────────────────────── -->
-<section id="skills">
-    <div class="section-container">
-        <p class="section-cmd">
-            <span class="user">ac</span>@<span class="user">portfolio</span>:<span class="dir">~</span><span class="dollar"> $ </span><span class="cmd">ls -la ./skills/</span>
-        </p>
-        <h2 class="section-title center">Skills</h2>
-        <div class="skills-grid">
-
-            <div class="skill-category">
-                <div class="term-titlebar">
-                    <div class="term-dot dot-red"></div>
-                    <div class="term-dot dot-yellow"></div>
-                    <div class="term-dot dot-green"></div>
-                    <span class="term-title">languages/</span>
-                </div>
-                <div class="skill-body">
-                    <p class="skill-cmd"><span class="cmd">drwxr-xr-x &nbsp;languages</span></p>
-                    <div class="skill-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">C</span>
-                        <span class="tag">C++</span>
-                        <span class="tag">C#</span>
-                        <span class="tag">Java</span>
-                        <span class="tag">JavaScript</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-category">
-                <div class="term-titlebar">
-                    <div class="term-dot dot-red"></div>
-                    <div class="term-dot dot-yellow"></div>
-                    <div class="term-dot dot-green"></div>
-                    <span class="term-title">web/</span>
-                </div>
-                <div class="skill-body">
-                    <p class="skill-cmd"><span class="cmd">drwxr-xr-x &nbsp;web</span></p>
-                    <div class="skill-tags">
-                        <span class="tag">HTML</span>
-                        <span class="tag">CSS</span>
-                        <span class="tag">Vue.js</span>
-                        <span class="tag">Firebase</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-category">
-                <div class="term-titlebar">
-                    <div class="term-dot dot-red"></div>
-                    <div class="term-dot dot-yellow"></div>
-                    <div class="term-dot dot-green"></div>
-                    <span class="term-title">tools/</span>
-                </div>
-                <div class="skill-body">
-                    <p class="skill-cmd"><span class="cmd">drwxr-xr-x &nbsp;tools</span></p>
-                    <div class="skill-tags">
-                        <span class="tag">Git</span>
-                        <span class="tag">Linux</span>
-                        <span class="tag">POSIX</span>
-                        <span class="tag">MySQL</span>
-                    </div>
-                </div>
-            </div>
-
+<section id="skills" class="skills-section">
+  <div class="section-container">
+    <div class="section-num">02 <span class="section-num-label">Skills</span></div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">Languages</div>
+        <div class="skill-tags">
+          <span class="tag">Python</span><span class="tag">C</span><span class="tag">C++</span>
+          <span class="tag">C#</span><span class="tag">Java</span><span class="tag">JavaScript</span>
         </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Web</div>
+        <div class="skill-tags">
+          <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">Vue.js</span><span class="tag">Firebase</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Tools</div>
+        <div class="skill-tags">
+          <span class="tag">Git</span><span class="tag">Linux</span><span class="tag">POSIX</span><span class="tag">MySQL</span>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
-<!-- ── Work ────────────────────────────────────────── -->
-<section id="work">
-    <div class="section-container">
-        <p class="section-cmd">
-            <span class="user">ac</span>@<span class="user">portfolio</span>:<span class="dir">~</span><span class="dollar"> $ </span><span class="cmd">ls ./projects/</span>
-        </p>
-        <h2 class="section-title center">Featured Work</h2>
-        <div class="projects-grid">
-
-            <a href="https://github.com/cfcata03/Chain-Reaction-app" target="_blank" class="project-card">
-                <div class="term-titlebar">
-                    <div class="term-dot dot-red"></div>
-                    <div class="term-dot dot-yellow"></div>
-                    <div class="term-dot dot-green"></div>
-                    <span class="term-title">chain-reaction/</span>
-                </div>
-                <div class="project-body">
-                    <p class="project-number">// project 01</p>
-                    <h3 class="project-title">Chain Reaction Project</h3>
-                    <p class="project-description">Multi-process nuclear chain reaction simulator using IPC mechanisms with real-time statistics and concurrent process management.</p>
-                    <div class="project-tags">
-                        <span class="tag">C</span>
-                        <span class="tag">IPC</span>
-                        <span class="tag">POSIX</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/cfcata03/wordle" target="_blank" class="project-card">
-                <div class="term-titlebar">
-                    <div class="term-dot dot-red"></div>
-                    <div class="term-dot dot-yellow"></div>
-                    <div class="term-dot dot-green"></div>
-                    <span class="term-title">wordle/</span>
-                </div>
-                <div class="project-body">
-                    <p class="project-number">// project 02</p>
-                    <h3 class="project-title">Wordle</h3>
-                    <p class="project-description">A fully functional Wordle clone built with Flask, featuring a Python backend and interactive frontend.</p>
-                    <div class="project-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Flask</span>
-                        <span class="tag">JavaScript</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/cfcata03/task-manager-app" target="_blank" class="project-card">
-                <div class="term-titlebar">
-                    <div class="term-dot dot-red"></div>
-                    <div class="term-dot dot-yellow"></div>
-                    <div class="term-dot dot-green"></div>
-                    <span class="term-title">task-manager/</span>
-                </div>
-                <div class="project-body">
-                    <p class="project-number">// project 03</p>
-                    <h3 class="project-title">Task Manager App <span class="wip-badge">WIP</span></h3>
-                    <p class="project-description">Streamlined productivity tool with real-time collaboration features.</p>
-                    <div class="project-tags">
-                        <span class="tag">Vue.js</span>
-                        <span class="tag">Firebase</span>
-                        <span class="tag">PWA</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/cfcata03/arcade" target="_blank" class="project-card">
-                <div class="term-titlebar">
-                    <div class="term-dot dot-red"></div>
-                    <div class="term-dot dot-yellow"></div>
-                    <div class="term-dot dot-green"></div>
-                    <span class="term-title">arcade/</span>
-                </div>
-                <div class="project-body">
-                    <p class="project-number">// project 04</p>
-                    <h3 class="project-title">Terminal Arcade</h3>
-                    <p class="project-description">A collection of five classic games — Hangman, Blackjack, Battleship, 2048, and Tetris — running in one terminal app built with Python and curses.</p>
-                    <div class="project-tags">
-                        <span class="tag">Python</span>
-                    </div>
-                </div>
-            </a>
-
-        </div>
+<section id="work" class="work-section">
+  <div class="section-container">
+    <div class="section-num">03 <span class="section-num-label">Work</span></div>
+    <div class="projects-grid">
+      <a href="https://github.com/cfcata03/Chain-Reaction-app" target="_blank" class="project-card">
+        <div class="project-meta"><span class="project-num">01</span></div>
+        <h3 class="project-title">Chain Reaction Project</h3>
+        <p class="project-description">Multi-process nuclear chain reaction simulator using IPC mechanisms with real-time statistics and concurrent process management.</p>
+        <div class="project-tags"><span class="tag">C</span><span class="tag">IPC</span><span class="tag">POSIX</span></div>
+        <span class="project-arrow">↗</span>
+      </a>
+      <a href="https://github.com/cfcata03/wordle" target="_blank" class="project-card">
+        <div class="project-meta"><span class="project-num">02</span></div>
+        <h3 class="project-title">Wordle</h3>
+        <p class="project-description">A fully functional Wordle clone built with Flask, featuring a Python backend and interactive frontend.</p>
+        <div class="project-tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">JavaScript</span></div>
+        <span class="project-arrow">↗</span>
+      </a>
+      <a href="https://github.com/cfcata03/task-manager-app" target="_blank" class="project-card">
+        <div class="project-meta"><span class="project-num">03</span></div>
+        <h3 class="project-title">Task Manager App <span class="wip-badge">WIP</span></h3>
+        <p class="project-description">Streamlined productivity tool with real-time collaboration features.</p>
+        <div class="project-tags"><span class="tag">Vue.js</span><span class="tag">Firebase</span><span class="tag">PWA</span></div>
+        <span class="project-arrow">↗</span>
+      </a>
+      <a href="https://github.com/cfcata03/arcade" target="_blank" class="project-card">
+        <div class="project-meta"><span class="project-num">04</span></div>
+        <h3 class="project-title">Terminal Arcade</h3>
+        <p class="project-description">Five classic games — Hangman, Blackjack, Battleship, 2048, and Tetris — running in one terminal app built with Python and curses.</p>
+        <div class="project-tags"><span class="tag">Python</span><span class="tag">curses</span></div>
+        <span class="project-arrow">↗</span>
+      </a>
     </div>
+  </div>
 </section>
 
-<!-- ── Contact ─────────────────────────────────────── -->
 <section id="contact" class="contact-section">
-    <div class="section-container">
-        <p class="section-cmd">
-            <span class="user">ac</span>@<span class="user">portfolio</span>:<span class="dir">~</span><span class="dollar"> $ </span><span class="cmd">./contact.sh</span>
-        </p>
-        <div class="contact-box">
-            <div class="term-titlebar">
-                <div class="term-dot dot-red"></div>
-                <div class="term-dot dot-yellow"></div>
-                <div class="term-dot dot-green"></div>
-                <span class="term-title">contact.sh — running</span>
-            </div>
-            <div class="contact-body">
-                <h2 class="section-title" style="margin-bottom:1rem">Let's Work Together</h2>
-                <p class="contact-text">Have a project in mind? Let's create something amazing.</p>
-
-                <div class="local-time">
-                    <span class="local-time-dot"></span>
-                    <span>Bucharest, Romania &middot; <span id="localTime">--:--:--</span></span>
-                </div>
-
-                <div class="contact-links">
-                    <a href="https://instagram.com/cefacicata" target="_blank" class="contact-btn">Instagram</a>
-                    <a href="https://github.com/cfcata03" target="_blank" class="contact-btn">GitHub</a>
-                    <a href="https://www.linkedin.com/in/alexandru-calin-976050287/" target="_blank" class="contact-btn">LinkedIn</a>
-                </div>
-
-                <div class="contact-separator"></div>
-
-                <form class="contact-form" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
-                    <input type="hidden" name="access_key" value="b78b0f2f-90fc-4b08-9be2-b099818ef205">
-                    <input type="hidden" name="subject" value="New Contact from Portfolio">
-                    <input type="hidden" name="redirect" value="https://cfcata03.github.io/#contact">
-
-                    <div class="form-group">
-                        <label class="form-label" for="name">enter name</label>
-                        <input type="text" id="name" name="name" placeholder="Your Name" required class="form-input">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="email">enter email</label>
-                        <input type="email" id="email" name="email" placeholder="Your Email" required class="form-input">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="message">enter message</label>
-                        <textarea id="message" name="message" placeholder="Your Message" rows="5" required class="form-input form-textarea"></textarea>
-                    </div>
-                    <button type="submit" class="form-submit">send_message</button>
-                    <div class="form-response" id="formResponse"></div>
-                </form>
-            </div>
+  <div class="section-container">
+    <div class="section-num">04 <span class="section-num-label">Contact</span></div>
+    <div class="contact-grid">
+      <div class="contact-block">
+        <h3 class="contact-heading">Let's Work Together</h3>
+        <p class="contact-sub">Have a project in mind or just want to say hello? I'd love to hear from you.</p>
+        <div class="local-time"><span class="local-time-dot"></span>Bucharest &nbsp;·&nbsp; <span id="localTime">--:--:--</span></div>
+        <div class="contact-links">
+          <a href="https://instagram.com/cefacicata" target="_blank" class="contact-btn">Instagram</a>
+          <a href="https://github.com/cfcata03" target="_blank" class="contact-btn">GitHub</a>
+          <a href="https://www.linkedin.com/in/alexandru-calin-976050287/" target="_blank" class="contact-btn">LinkedIn</a>
         </div>
+      </div>
+      <div class="contact-block">
+        <form class="contact-form" id="contactForm">
+          <input type="hidden" name="access_key" value="b78b0f2f-90fc-4b08-9be2-b099818ef205">
+          <input type="hidden" name="subject" value="New Contact from Portfolio">
+          <div class="form-group"><label class="form-label">Name</label><input type="text" name="name" placeholder="Your name" required class="form-input"></div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" placeholder="your@email.com" required class="form-input"></div>
+          <div class="form-group"><label class="form-label">Message</label><textarea name="message" rows="4" placeholder="Tell me about your project..." required class="form-input form-textarea"></textarea></div>
+          <button type="submit" class="form-submit"><span>Send Message</span></button>
+          <div class="form-response" id="formResponse"></div>
+        </form>
+      </div>
     </div>
+  </div>
 </section>
-
 </main>
 
 <footer class="footer">
-    <div>
-        <p class="footer-line">2026 Alexandru Calin. All rights reserved.</p>
-        <p class="footer-tagline">Designed &amp; Built with love</p>
-    </div>
+  <div class="footer-logo">A<span>C</span></div>
+  <div class="footer-line">© 2026 Alexandru Calin</div>
 </footer>
 
 <script>
-/* ══════════════════════════════════════════════════
-   LOADING — terminal boot sequence
-══════════════════════════════════════════════════ */
-const bootSteps = [
-    { label: 'Initializing kernel...', delay: 0 },
-    { label: 'Loading dependencies...', delay: 220 },
-    { label: 'Mounting filesystem...', delay: 420 },
-    { label: 'Starting renderer...', delay: 620 },
-    { label: 'Authenticating user...', delay: 800 },
-    { label: 'Loading portfolio modules...', delay: 980 },
-];
-
-const bootLines = document.getElementById('boot-lines');
-const bootProgress = document.getElementById('bootProgress');
-
-bootSteps.forEach((step, i) => {
-    setTimeout(() => {
-        const line = document.createElement('div');
-        line.className = 'line';
-        const PAD = 38 - step.label.length;
-        line.innerHTML = `<span class="label">${step.label}</span><span class="status-ok">${'&nbsp;'.repeat(Math.max(0,PAD))}[ OK ]</span>`;
-        bootLines.appendChild(line);
-    }, step.delay);
-});
-
-setTimeout(() => {
-    bootProgress.innerHTML = '<span style="color:var(--g-dim)">Loading... </span><span id="bootBar"></span>';
-    let pct = 0;
-    const interval = setInterval(() => {
-        pct += 5;
-        const filled = Math.round(pct / 5);
-        document.getElementById('bootBar').textContent = '■'.repeat(filled) + '□'.repeat(20 - filled) + ' ' + pct + '%';
-        if (pct >= 100) clearInterval(interval);
-    }, 18);
-}, 1100);
-
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        document.getElementById('loadingScreen').classList.add('hide');
-    }, 2000);
-});
-
-/* ══════════════════════════════════════════════════
-   TERMINAL THEME TOGGLE (green ↔ amber)
-══════════════════════════════════════════════════ */
-function setTermTheme(t) {
-    document.documentElement.setAttribute('data-term', t);
-    localStorage.setItem('term-theme', t);
-}
-function toggleTermTheme() {
-    const cur = document.documentElement.getAttribute('data-term');
-    setTermTheme(cur === 'amber' ? 'green' : 'amber');
-}
-const savedTerm = localStorage.getItem('term-theme');
-if (savedTerm === 'amber') setTermTheme('amber');
-
-document.getElementById('themeToggle').addEventListener('click', toggleTermTheme);
-document.getElementById('mobileThemeToggle').addEventListener('click', toggleTermTheme);
-
-/* ══════════════════════════════════════════════════
-   HAMBURGER
-══════════════════════════════════════════════════ */
-const hamburger  = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    mobileMenu.classList.toggle('active');
-    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-});
-document.querySelectorAll('.mobile-link').forEach(l => {
-    l.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        mobileMenu.classList.remove('active');
-        document.body.style.overflow = '';
-    });
-});
-
-/* ══════════════════════════════════════════════════
-   SMOOTH SCROLL
-══════════════════════════════════════════════════ */
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-        e.preventDefault();
-        const target = document.querySelector(a.getAttribute('href'));
-        if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
-    });
-});
-
-/* ══════════════════════════════════════════════════
-   ACTIVE NAV LINK
-══════════════════════════════════════════════════ */
-window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('section[id]');
-    const scrollY  = window.pageYOffset;
-    const winH     = window.innerHeight;
-    const docH     = document.documentElement.scrollHeight;
-    const atBottom = scrollY + winH >= docH - 50;
-    let active = null;
-    sections.forEach(s => {
-        const top = s.offsetTop - 150;
-        if (atBottom && s.id === 'contact') active = 'contact';
-        else if (scrollY >= top && scrollY < top + s.offsetHeight) active = s.id;
-    });
-    document.querySelectorAll('.nav-link').forEach(l => {
-        l.classList.toggle('active', l.getAttribute('href') === '#' + active);
-    });
-});
-
-/* ══════════════════════════════════════════════════
-   CARD SCROLL REVEAL
-══════════════════════════════════════════════════ */
-const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-        if (e.isIntersecting) {
-            e.target.style.opacity = '0';
-            e.target.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                e.target.style.transition = 'opacity .5s ease, transform .5s ease';
-                e.target.style.opacity = '1';
-                e.target.style.transform = 'translateY(0)';
-            }, 80);
-            obs.unobserve(e.target);
-        }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
-document.querySelectorAll('.project-card').forEach(c => obs.observe(c));
-
-/* ══════════════════════════════════════════════════
-   TYPING ANIMATION
-══════════════════════════════════════════════════ */
-const phrases  = ['Aspiring Engineer & Developer', 'Web Developer', 'Problem Solver', 'Coding Enthusiast'];
-const typedEl  = document.getElementById('typed');
-let phraseIdx  = 0, charIdx = 0, deleting = false;
-
-function type() {
-    const cur = phrases[phraseIdx];
-    typedEl.textContent = deleting ? cur.substring(0, charIdx - 1) : cur.substring(0, charIdx + 1);
-    deleting ? charIdx-- : charIdx++;
-    if (!deleting && charIdx === cur.length) {
-        deleting = true; setTimeout(type, 2000); return;
-    }
-    if (deleting && charIdx === 0) {
-        deleting = false; phraseIdx = (phraseIdx + 1) % phrases.length;
-        setTimeout(type, 400); return;
-    }
-    setTimeout(type, deleting ? 40 : 80);
-}
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loadingScreen').classList.add('hide'),800));
+function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('theme',t);}
+function toggleTheme(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+const saved=localStorage.getItem('theme');
+if(saved)setTheme(saved);else if(window.matchMedia('(prefers-color-scheme: dark)').matches)setTheme('dark');
+document.getElementById('themeToggle').addEventListener('click',toggleTheme);
+const hamburger=document.getElementById('hamburger'),mobileMenu=document.getElementById('mobileMenu');
+hamburger.addEventListener('click',()=>{hamburger.classList.toggle('active');mobileMenu.classList.toggle('active');document.body.style.overflow=mobileMenu.classList.contains('active')?'hidden':'';});
+document.querySelectorAll('.mobile-link').forEach(l=>l.addEventListener('click',()=>{hamburger.classList.remove('active');mobileMenu.classList.remove('active');document.body.style.overflow='';}));
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)window.scrollTo({top:t.offsetTop-56,behavior:'smooth'});}));
+window.addEventListener('scroll',()=>{const s=document.querySelectorAll('section[id]'),y=window.pageYOffset,atBot=y+window.innerHeight>=document.documentElement.scrollHeight-50;let active=null;s.forEach(sec=>{const top=sec.offsetTop-150;if(atBot&&sec.id==='contact')active='contact';else if(y>=top&&y<top+sec.offsetHeight)active=sec.id;});document.querySelectorAll('.nav-link').forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+active));});
+const phrases=['Aspiring Engineer & Developer','Web Developer','Problem Solver','Coding Enthusiast'];
+const typedEl=document.getElementById('typed');let pIdx=0,cIdx=0,del=false;
+function type(){const cur=phrases[pIdx];typedEl.textContent=del?cur.substring(0,cIdx-1):cur.substring(0,cIdx+1);del?cIdx--:cIdx++;if(!del&&cIdx===cur.length){del=true;setTimeout(type,2000);return;}if(del&&cIdx===0){del=false;pIdx=(pIdx+1)%phrases.length;setTimeout(type,400);return;}setTimeout(type,del?40:80);}
 type();
-
-/* ══════════════════════════════════════════════════
-   LOCAL TIME
-══════════════════════════════════════════════════ */
-function updateLocalTime() {
-    const el = document.getElementById('localTime');
-    if (!el) return;
-    el.textContent = new Intl.DateTimeFormat('en-GB', {
-        timeZone: 'Europe/Bucharest',
-        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
-    }).format(new Date());
-}
-updateLocalTime();
-setInterval(updateLocalTime, 1000);
-
-/* ══════════════════════════════════════════════════
-   CONTACT FORM
-══════════════════════════════════════════════════ */
-const contactForm  = document.getElementById('contactForm');
-const formResponse = document.getElementById('formResponse');
-
-contactForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const btn = contactForm.querySelector('.form-submit');
-    btn.disabled = true;
-    btn.textContent = 'sending...';
-    try {
-        const res  = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: new FormData(contactForm) });
-        const data = await res.json();
-        if (data.success) {
-            formResponse.textContent = 'Message sent successfully.';
-            formResponse.className = 'form-response success';
-            contactForm.reset();
-        } else throw new Error(data.message);
-    } catch {
-        formResponse.textContent = 'Something went wrong. Please try again.';
-        formResponse.className = 'form-response error';
-    } finally {
-        btn.disabled = false;
-        btn.textContent = 'send_message';
-        setTimeout(() => { formResponse.style.display = 'none'; }, 5000);
-    }
-});
-
-/* ══════════════════════════════════════════════════
-   GAME — Flappy AC
-══════════════════════════════════════════════════ */
-const gameBtn   = document.getElementById('gameBtn');
-const gameModal = document.getElementById('gameModal');
-let gameCanvas, ctx, bird, pipes, score, gameRunning, animId;
-
-gameBtn.addEventListener('click', () => { gameModal.classList.add('active'); initGame(); });
-
-function initGame() {
-    gameCanvas = document.getElementById('gameCanvas');
-    ctx = gameCanvas.getContext('2d');
-    bird = { x: 80, y: 200, width: 34, height: 24, velocity: 0, gravity: 0.45, jump: -7.5 };
-    pipes = []; score = 0; gameRunning = true;
-    document.getElementById('gameScore').textContent = score;
-    gameCanvas.addEventListener('click', flap);
-    document.addEventListener('keydown', e => {
-        if (e.code === 'Space' && gameModal.classList.contains('active')) { e.preventDefault(); flap(); }
-    });
-    gameLoop();
-}
-
-document.getElementById('gameClose').addEventListener('click', () => {
-    gameModal.classList.remove('active');
-    gameRunning = false;
-    if (animId) cancelAnimationFrame(animId);
-});
-
-function flap() { if (gameRunning) bird.velocity = bird.jump; }
-
-function createPipe() {
-    const gap = 140, min = 50, max = gameCanvas.height - gap - min;
-    const h = Math.floor(Math.random() * (max - min)) + min;
-    pipes.push({ x: gameCanvas.width, top: h, bottom: h + gap, width: 55, passed: false });
-}
-
-function updateGame() {
-    if (!gameRunning) return;
-    bird.velocity += bird.gravity;
-    bird.y += bird.velocity;
-    if (bird.y <= 0 || bird.y + bird.height >= gameCanvas.height) { gameOver(); return; }
-    if (!pipes.length || pipes[pipes.length - 1].x < gameCanvas.width - 190) createPipe();
-    pipes.forEach((p, i) => {
-        p.x -= 3;
-        if (bird.x + bird.width > p.x && bird.x < p.x + p.width &&
-            (bird.y < p.top || bird.y + bird.height > p.bottom)) { gameOver(); return; }
-        if (!p.passed && bird.x > p.x + p.width) {
-            p.passed = true; score++;
-            document.getElementById('gameScore').textContent = score;
-        }
-        if (p.x + p.width < 0) pipes.splice(i, 1);
-    });
-}
-
-function drawGame() {
-    ctx.fillStyle = '#0c0c0c'; ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-    // Grid lines
-    ctx.strokeStyle = 'rgba(0,255,65,0.05)'; ctx.lineWidth = 1;
-    for (let x = 0; x < gameCanvas.width; x += 40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,gameCanvas.height); ctx.stroke(); }
-    for (let y = 0; y < gameCanvas.height; y += 40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(gameCanvas.width,y); ctx.stroke(); }
-    // Pipes
-    ctx.fillStyle = '#003311'; ctx.strokeStyle = '#00ff41'; ctx.lineWidth = 2;
-    pipes.forEach(p => {
-        ctx.beginPath(); ctx.rect(p.x, 0, p.width, p.top); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.rect(p.x, p.bottom, p.width, gameCanvas.height - p.bottom); ctx.fill(); ctx.stroke();
-    });
-    // Bird
-    ctx.fillStyle = '#0a1a0a'; ctx.strokeStyle = '#00ff41'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.roundRect(bird.x, bird.y, bird.width, bird.height, 4); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#00ff41';
-    ctx.beginPath(); ctx.arc(bird.x + 24, bird.y + 10, 3, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#00ff41'; ctx.font = 'bold 10px monospace'; ctx.fillText('AC', bird.x + 5, bird.y + 15);
-}
-
-function gameLoop() {
-    if (!gameRunning) return;
-    updateGame(); drawGame();
-    animId = requestAnimationFrame(gameLoop);
-}
-
-function gameOver() {
-    gameRunning = false;
-    ctx.fillStyle = 'rgba(0,0,0,0.8)'; ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-    ctx.fillStyle = '#00ff41'; ctx.font = 'bold 28px monospace'; ctx.textAlign = 'center';
-    ctx.fillText('GAME OVER', gameCanvas.width / 2, gameCanvas.height / 2 - 30);
-    ctx.font = '16px monospace';
-    ctx.fillText('score: ' + score, gameCanvas.width / 2, gameCanvas.height / 2 + 5);
-    ctx.fillStyle = '#006619'; ctx.font = '13px monospace';
-    ctx.fillText('[ click to restart ]', gameCanvas.width / 2, gameCanvas.height / 2 + 40);
-    gameCanvas.addEventListener('click', restartGame);
-}
-
-function restartGame() {
-    gameCanvas.removeEventListener('click', restartGame);
-    bird.y = 200; bird.velocity = 0; pipes = []; score = 0; gameRunning = true;
-    document.getElementById('gameScore').textContent = score;
-    gameLoop();
-}
+function updateTime(){const el=document.getElementById('localTime');if(!el)return;el.textContent=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Bucharest',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date());}
+updateTime();setInterval(updateTime,1000);
+const contactForm=document.getElementById('contactForm'),formResponse=document.getElementById('formResponse');
+contactForm.addEventListener('submit',async e=>{e.preventDefault();const btn=contactForm.querySelector('.form-submit span');btn.textContent='Sending...';contactForm.querySelector('.form-submit').disabled=true;try{const res=await fetch('https://api.web3forms.com/submit',{method:'POST',body:new FormData(contactForm)});const data=await res.json();if(data.success){formResponse.textContent='Message sent!';formResponse.className='form-response success';contactForm.reset();}else throw new Error(data.message);}catch{formResponse.textContent='Something went wrong. Please try again.';formResponse.className='form-response error';}finally{contactForm.querySelector('.form-submit').disabled=false;btn.textContent='Send Message';setTimeout(()=>{formResponse.style.display='none';},5000);}});
+const gameBtn=document.getElementById('gameBtn'),gameModal=document.getElementById('gameModal');
+let gameCanvas,ctx,bird,pipes,score,gameRunning,animId;
+gameBtn.addEventListener('click',()=>{gameModal.classList.add('active');initGame();});
+document.getElementById('gameClose').addEventListener('click',()=>{gameModal.classList.remove('active');gameRunning=false;if(animId)cancelAnimationFrame(animId);});
+function initGame(){gameCanvas=document.getElementById('gameCanvas');ctx=gameCanvas.getContext('2d');bird={x:80,y:200,width:34,height:24,velocity:0,gravity:.45,jump:-7.5};pipes=[];score=0;gameRunning=true;document.getElementById('gameScore').textContent=score;gameCanvas.addEventListener('click',flap);document.addEventListener('keydown',e=>{if(e.code==='Space'&&gameModal.classList.contains('active')){e.preventDefault();flap();}});gameLoop();}
+function flap(){if(gameRunning)bird.velocity=bird.jump;}
+function createPipe(){const gap=140,min=50,max=gameCanvas.height-gap-min,h=Math.floor(Math.random()*(max-min))+min;pipes.push({x:gameCanvas.width,top:h,bottom:h+gap,width:55,passed:false});}
+function updateGame(){if(!gameRunning)return;bird.velocity+=bird.gravity;bird.y+=bird.velocity;if(bird.y<=0||bird.y+bird.height>=gameCanvas.height){gameOver();return;}if(!pipes.length||pipes[pipes.length-1].x<gameCanvas.width-190)createPipe();pipes.forEach((p,i)=>{p.x-=3;if(bird.x+bird.width>p.x&&bird.x<p.x+p.width&&(bird.y<p.top||bird.y+bird.height>p.bottom)){gameOver();return;}if(!p.passed&&bird.x>p.x+p.width){p.passed=true;score++;document.getElementById('gameScore').textContent=score;}if(p.x+p.width<0)pipes.splice(i,1);});}
+function drawGame(){ctx.fillStyle='#fff';ctx.fillRect(0,0,gameCanvas.width,gameCanvas.height);ctx.fillStyle='#000';ctx.fillRect(0,gameCanvas.height-3,gameCanvas.width,3);pipes.forEach(p=>{ctx.fillStyle='#000';ctx.fillRect(p.x,0,p.width,p.top);ctx.fillRect(p.x,p.bottom,p.width,gameCanvas.height-p.bottom);ctx.fillStyle='#ffe500';ctx.fillRect(p.x,p.top-8,p.width,8);ctx.fillRect(p.x,p.bottom,p.width,8);});ctx.fillStyle='#ffe500';ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.fillRect(bird.x,bird.y,bird.width,bird.height);ctx.strokeRect(bird.x,bird.y,bird.width,bird.height);ctx.fillStyle='#000';ctx.beginPath();ctx.arc(bird.x+24,bird.y+9,3,0,Math.PI*2);ctx.fill();}
+function gameLoop(){if(!gameRunning)return;updateGame();drawGame();animId=requestAnimationFrame(gameLoop);}
+function gameOver(){gameRunning=false;ctx.fillStyle='rgba(255,229,0,.9)';ctx.fillRect(0,0,gameCanvas.width,gameCanvas.height);ctx.fillStyle='#000';ctx.font='bold 32px "Space Grotesk",sans-serif';ctx.textAlign='center';ctx.fillText('GAME OVER',gameCanvas.width/2,gameCanvas.height/2-20);ctx.font='bold 18px "Space Grotesk",sans-serif';ctx.fillText('SCORE: '+score,gameCanvas.width/2,gameCanvas.height/2+15);ctx.font='14px "Space Grotesk",sans-serif';ctx.fillText('CLICK TO RESTART',gameCanvas.width/2,gameCanvas.height/2+50);gameCanvas.addEventListener('click',restartGame);}
+function restartGame(){gameCanvas.removeEventListener('click',restartGame);bird.y=200;bird.velocity=0;pipes=[];score=0;gameRunning=true;document.getElementById('gameScore').textContent=score;gameLoop();}
 </script>
 </body>
 </html>
