@@ -150,9 +150,10 @@ a.project-card:hover .project-arrow{transform:translate(4px,-4px);}
 .footer-logo span{color:var(--accent);}
 .footer-line{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.5;}
 
+/* ── Tablet+ ── */
 @media(min-width:768px){
   .skills-grid{grid-template-columns:1fr 1fr 1fr;}
-  .skills-grid .skill-card{grid-template-columns:1fr;border-right:var(--border);}
+  .skills-grid .skill-card{grid-template-columns:1fr;border-right:var(--border);border-bottom:var(--border);}
   .skills-grid .skill-card:last-child{border-right:none;}
   .projects-grid{grid-template-columns:1fr 1fr;}
   a.project-card:nth-child(odd){border-right:var(--border);}
@@ -162,10 +163,38 @@ a.project-card:hover .project-arrow{transform:translate(4px,-4px);}
   .nav-links{display:flex;}
   .hamburger{display:none;}
 }
-@media(max-width:640px){
+
+/* ── Mobile ── */
+@media(max-width:767px){
   .nav-links{display:none;}
   .hamburger{display:flex;}
-  .btn-nav.btn-primary{display:none;}
+  .nav-logo{padding:0 1rem;}
+  .btn-nav{padding:0 .85rem;font-size:.7rem;}
+  .mobile-link{font-size:2rem;padding:1rem 1.5rem;}
+  .hero{min-height:85vh;padding:3rem 1.25rem 2.5rem;}
+  .hero-label{font-size:.7rem;margin-bottom:1rem;}
+  .hero-name{font-size:clamp(3rem,14vw,5rem);margin-bottom:1.5rem;}
+  .hero-sub{font-size:1rem;padding-top:1rem;}
+  .hero-actions{flex-direction:column;gap:.5rem;margin-top:1.5rem;}
+  .btn{width:100%;justify-content:center;padding:.75rem 1.5rem;}
+  .section-container{padding:0 1.25rem;}
+  .about-section,.skills-section,.work-section,.contact-section{padding:3rem 0;}
+  .section-num{font-size:clamp(3.5rem,14vw,6rem);margin-bottom:1rem;gap:1rem;}
+  .section-num-label{font-size:1.25rem;}
+  .about-block{padding:1.5rem;}
+  .skill-card{grid-template-columns:1fr;gap:1rem;padding:1.5rem 1.25rem;}
+  .skill-name{font-size:1.2rem;}
+  .project-title{font-size:1.25rem;}
+  .project-num{font-size:2rem;}
+  a.project-card{padding:1.75rem 1.25rem;}
+  .project-arrow{font-size:1.5rem;top:1.75rem;right:1.25rem;}
+  .project-description{font-size:.875rem;}
+  .contact-heading{font-size:1.75rem;}
+  .contact-block{padding:2rem 1.25rem;}
+  .contact-sub{font-size:.9rem;}
+  .footer{flex-direction:column;text-align:center;padding:1.5rem;}
+  .game-modal{align-items:flex-start;padding-top:1.5rem;}
+  .game-container{transform:scale(0.82);transform-origin:top center;margin-bottom:-90px;}
 }
 </style>
 </head>
