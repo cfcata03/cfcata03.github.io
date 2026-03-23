@@ -27,6 +27,23 @@
 <body>
 <div id="loadingScreen"><div class="load-text">AC</div></div>
 
+<div class="project-modal" id="projectModal">
+  <div class="project-modal-inner">
+    <div class="project-modal-head">
+      <span id="pmNum" class="pm-num"></span>
+      <button id="pmClose" class="pm-close">✕</button>
+    </div>
+    <div class="project-modal-body">
+      <h2 id="pmTitle" class="pm-title"></h2>
+      <p id="pmDesc" class="pm-desc"></p>
+      <div id="pmTags" class="pm-tags"></div>
+    </div>
+    <div class="project-modal-foot">
+      <a id="pmLink" href="#" target="_blank" class="pm-link">View on GitHub ↗</a>
+    </div>
+  </div>
+</div>
+
 <div class="game-modal" id="gameModal">
   <div class="game-container">
     <div class="game-header"><h2>Breakout AC</h2><button class="game-close" id="gameClose">✕</button></div>
@@ -119,45 +136,39 @@
   <div class="section-container">
     <div class="section-num">03 <span class="section-num-label">Work</span></div>
     <div class="projects-grid">
-      <a href="https://github.com/cfcata03/Chain-Reaction-app" target="_blank" class="project-card">
+      <a href="https://github.com/cfcata03/Chain-Reaction-app" target="_blank" class="project-card" data-detail="Multi-process nuclear chain reaction simulator built in C using fork, pipes, shared memory, and semaphores. Manages concurrent child processes representing neutrons, with real-time statistics on reactions, fissions, and energy output.">
         <div class="project-meta"><span class="project-num">01</span></div>
         <h3 class="project-title">Chain Reaction Project</h3>
-        <p class="project-description">Multi-process nuclear chain reaction simulator using IPC mechanisms with real-time statistics and concurrent process management.</p>
         <div class="project-tags"><span class="tag">C</span><span class="tag">IPC</span><span class="tag">POSIX</span></div>
         <span class="project-arrow">↗</span>
       </a>
-      <a href="https://github.com/cfcata03/wordle" target="_blank" class="project-card">
+      <a href="https://github.com/cfcata03/wordle" target="_blank" class="project-card" data-detail="A fully functional Wordle clone built with Flask. Features a Python backend handling word validation and game state, and an interactive frontend with color-coded tile feedback, an on-screen keyboard, and streak tracking.">
         <div class="project-meta"><span class="project-num">02</span></div>
         <h3 class="project-title">Wordle</h3>
-        <p class="project-description">A fully functional Wordle clone built with Flask, featuring a Python backend and interactive frontend.</p>
         <div class="project-tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">JavaScript</span></div>
         <span class="project-arrow">↗</span>
       </a>
-      <a href="https://github.com/cfcata03/task-manager-terminal" target="_blank" class="project-card">
+      <a href="https://github.com/cfcata03/task-manager-terminal" target="_blank" class="project-card" data-detail="Keyboard-driven Kanban task manager that runs entirely in the terminal, built with Python and the Rich library. Supports multiple status columns, priority levels with color coding, task creation and editing, and persistent JSON-based storage.">
         <div class="project-meta"><span class="project-num">03</span></div>
         <h3 class="project-title">Task Manager — Terminal Edition</h3>
-        <p class="project-description">Keyboard-driven Kanban task manager built for the terminal, with priority color coding and persistent JSON storage.</p>
         <div class="project-tags"><span class="tag">Python</span><span class="tag">Rich</span></div>
         <span class="project-arrow">↗</span>
       </a>
-      <a href="https://github.com/cfcata03/arcade" target="_blank" class="project-card">
+      <a href="https://github.com/cfcata03/arcade" target="_blank" class="project-card" data-detail="Five classic games — Hangman, Blackjack, Battleship, 2048, and Tetris — all running inside one unified terminal app built with Python and curses. Features a main menu, per-game score tracking, and a consistent TUI design across all games.">
         <div class="project-meta"><span class="project-num">04</span></div>
         <h3 class="project-title">Terminal Arcade</h3>
-        <p class="project-description">Five classic games — Hangman, Blackjack, Battleship, 2048, and Tetris — running in one terminal app built with Python and curses.</p>
         <div class="project-tags"><span class="tag">Python</span><span class="tag">curses</span></div>
         <span class="project-arrow">↗</span>
       </a>
-      <a href="https://github.com/cfcata03/productivity-timer" target="_blank" class="project-card">
+      <a href="https://github.com/cfcata03/productivity-timer" target="_blank" class="project-card" data-detail="All-in-one terminal productivity suite built with Python and curses. Includes a Pomodoro timer with configurable intervals, a per-project time tracker, and a habit tracker with daily streak counts — all exportable to CSV.">
         <div class="project-meta"><span class="project-num">05</span></div>
         <h3 class="project-title">Focus — Productivity Suite</h3>
-        <p class="project-description">Terminal productivity app with a Pomodoro timer, project time tracker, and habit tracker with streak counts and CSV export.</p>
         <div class="project-tags"><span class="tag">Python</span><span class="tag">curses</span></div>
         <span class="project-arrow">↗</span>
       </a>
       <div class="project-card project-card--soon">
         <div class="project-meta"><span class="project-num">06</span></div>
         <h3 class="project-title">Coming Soon</h3>
-        <p class="project-description">Something new is in the works.</p>
         <div class="project-tags"><span class="tag">···</span></div>
       </div>
     </div>
@@ -219,6 +230,53 @@ function updateTime(){const el=document.getElementById('localTime');if(!el)retur
 updateTime();setInterval(updateTime,1000);
 const contactForm=document.getElementById('contactForm'),formResponse=document.getElementById('formResponse');
 contactForm.addEventListener('submit',async e=>{e.preventDefault();const btn=contactForm.querySelector('.form-submit span');btn.textContent='Sending...';contactForm.querySelector('.form-submit').disabled=true;try{const res=await fetch('https://api.web3forms.com/submit',{method:'POST',body:new FormData(contactForm)});const data=await res.json();if(data.success){formResponse.textContent='Message sent!';formResponse.className='form-response success';contactForm.reset();}else throw new Error(data.message);}catch{formResponse.textContent='Something went wrong. Please try again.';formResponse.className='form-response error';}finally{contactForm.querySelector('.form-submit').disabled=false;btn.textContent='Send Message';setTimeout(()=>{formResponse.style.display='none';},5000);}});
+// ── Project Modal ──
+const projectModal=document.getElementById('projectModal');
+const pmInner=projectModal.querySelector('.project-modal-inner');
+function closeProjectModal(){
+  pmInner.style.transition='none';
+  pmInner.style.transform='';
+  pmInner.style.opacity='';
+  pmInner.style.transformOrigin='';
+  pmInner.style.background='';
+  projectModal.classList.remove('active');
+  document.body.style.overflow='';
+}
+document.querySelectorAll('a.project-card').forEach(card=>{
+  card.addEventListener('click',e=>{
+    e.preventDefault();
+    document.getElementById('pmNum').textContent=card.querySelector('.project-num').textContent;
+    document.getElementById('pmTitle').textContent=card.querySelector('.project-title').textContent;
+    document.getElementById('pmDesc').textContent=card.dataset.detail||'';
+    document.getElementById('pmTags').innerHTML=[...card.querySelectorAll('.project-tags .tag')].map(t=>`<span class="tag">${t.textContent}</span>`).join('');
+    document.getElementById('pmLink').href=card.href;
+    // show modal at natural size with card's yellow bg to measure it
+    pmInner.style.transition='none';
+    pmInner.style.opacity='0';
+    pmInner.style.transform='none';
+    pmInner.style.background='var(--accent)';
+    projectModal.classList.add('active');
+    document.body.style.overflow='hidden';
+    void pmInner.offsetWidth; // force layout
+    const cr=card.getBoundingClientRect();
+    const mr=pmInner.getBoundingClientRect();
+    const sx=cr.width/mr.width;
+    const sy=cr.height/mr.height;
+    const ox=(cr.left+cr.width/2)-mr.left;
+    const oy=(cr.top+cr.height/2)-mr.top;
+    pmInner.style.transformOrigin=`${ox}px ${oy}px`;
+    pmInner.style.transform=`scale(${sx},${sy})`;
+    void pmInner.offsetWidth; // apply scale before transition
+    pmInner.style.transition='transform .4s cubic-bezier(.22,.61,.36,1), opacity .15s ease, background .4s ease';
+    pmInner.style.transform='scale(1)';
+    pmInner.style.opacity='1';
+    pmInner.style.background='var(--bg)';
+  });
+});
+document.getElementById('pmClose').addEventListener('click',closeProjectModal);
+projectModal.addEventListener('click',e=>{if(e.target===projectModal)closeProjectModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&projectModal.classList.contains('active'))closeProjectModal();});
+
 // ── Breakout AC ──
 const gameBtn=document.getElementById('gameBtn'),gameModal=document.getElementById('gameModal');
 let gc,ctx,paddle,ball,bricks,score,lives,bestScore=0,level,gState,animId;
