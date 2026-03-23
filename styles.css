@@ -119,15 +119,15 @@ a.project-card:hover .project-arrow{transform:translate(4px,-4px);}
 .project-modal{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;z-index:10000;padding:1.5rem;}
 .project-modal.active{display:flex;animation:backdropIn .25s ease;}
 .project-modal-inner{background:var(--bg);border:var(--border);max-width:580px;width:100%;max-height:90vh;overflow-y:auto;}
-.project-modal-head{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 1.5rem;border-bottom:var(--border);}
-.pm-num{font-size:2rem;font-weight:700;letter-spacing:-.04em;opacity:.25;line-height:1;}
-.pm-close{background:none;border:none;color:var(--fg);font-weight:900;width:36px;height:36px;cursor:pointer;font-size:1.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:.85;transition:opacity .15s;}
+.project-modal-head{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 1.5rem;}
+.pm-num{font-size:5rem;font-weight:700;letter-spacing:-.04em;opacity:.25;line-height:1;}
+.pm-close{background:none;border:none;color:var(--fg);font-weight:900;width:48px;height:48px;cursor:pointer;font-size:2.25rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:.85;transition:opacity .15s;}
 .pm-close:hover{opacity:1;}
 .project-modal-body{padding:2rem 1.5rem;}
 .pm-title{font-size:1.75rem;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:1rem;}
 .pm-desc{font-size:.95rem;line-height:1.75;opacity:.7;margin-bottom:1.5rem;}
 .pm-tags{display:flex;flex-wrap:wrap;gap:.5rem;}
-.project-modal-foot{padding:1.5rem;border-top:var(--border);}
+.project-modal-foot{padding:1.5rem;}
 .pm-link{font-family:var(--font);font-size:.85rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.8rem 2rem;background:var(--fg);color:var(--bg);border:var(--border);cursor:pointer;transition:background .15s,color .15s;display:inline-flex;align-items:center;gap:.5rem;}
 .pm-link:hover{background:var(--accent);color:#000;border-color:#000;}
 
