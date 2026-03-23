@@ -273,6 +273,19 @@ document.querySelectorAll('a.project-card').forEach(card=>{
     pmInner.style.background='var(--bg)';
   });
 });
+// ── Name tilt ──
+const heroName=document.querySelector('.hero-name');
+heroName.addEventListener('mousemove',e=>{
+  const r=heroName.getBoundingClientRect();
+  const rx=-((e.clientY-r.top-r.height/2)/r.height)*4;
+  const ry=((e.clientX-r.left-r.width/2)/r.width)*5;
+  heroName.style.transition='transform .05s ease';
+  heroName.style.transform=`perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+});
+heroName.addEventListener('mouseleave',()=>{
+  heroName.style.transition='transform 1.2s cubic-bezier(.22,.61,.36,1)';
+  heroName.style.transform='';
+});
 document.getElementById('pmClose').addEventListener('click',closeProjectModal);
 projectModal.addEventListener('click',e=>{if(e.target===projectModal)closeProjectModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&projectModal.classList.contains('active'))closeProjectModal();});
