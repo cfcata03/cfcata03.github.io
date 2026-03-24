@@ -83,7 +83,7 @@
 <section class="hero">
   <div class="hero-bg-num">AC</div>
   <div class="section-container">
-    <div class="hero-label">Available for opportunities</div>
+    <a href="https://www.linkedin.com/in/alexandru-calin-976050287/" target="_blank" class="hero-label">Open to work ↗</a>
     <h1 class="hero-name">Alexandru<em>Calin</em></h1>
     <p class="hero-sub"><span id="typed"></span><span class="cursor">_</span></p>
     <div class="hero-actions">
@@ -273,6 +273,11 @@ document.querySelectorAll('a.project-card').forEach(card=>{
     pmInner.style.background='var(--bg)';
   });
 });
+// ── Scroll reveal ──
+const revealObs=new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('sr-in');revealObs.unobserve(en.target);}});
+},{threshold:0.08});
+document.querySelectorAll('section[id]').forEach(s=>{s.classList.add('sr');revealObs.observe(s);});
 // ── Name tilt ──
 const heroName=document.querySelector('.hero-name');
 heroName.addEventListener('mousemove',e=>{

@@ -78,6 +78,10 @@ a{color:inherit;text-decoration:none;}
 .section-num-label{font-size:1.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--fg);opacity:1;}
 section{border-bottom:var(--border);}
 
+/* SCROLL REVEAL */
+.sr{opacity:0;transform:translateY(36px);}
+.sr.sr-in{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.22,.61,.36,1);}
+
 /* ABOUT */
 .about-section{padding:5rem 0;}
 .about-grid{display:grid;gap:2rem;}
