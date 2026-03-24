@@ -27,6 +27,21 @@
 <body>
 <div id="loadingScreen"><div class="load-text">AC</div></div>
 
+<div class="cv-modal" id="cvModal">
+  <div class="cv-modal-inner">
+    <div class="cv-modal-head">
+      <span class="cv-modal-title">CV — Alexandru Calin</span>
+      <div class="cv-modal-actions">
+        <a href="CV_AlexandruCalin.pdf" download class="btn btn-solid" style="padding:.5rem 1.25rem;font-size:.8rem;">↓ Download</a>
+        <button id="cvClose" class="pm-close">✕</button>
+      </div>
+    </div>
+    <div class="cv-modal-body">
+      <iframe src="CV_AlexandruCalin.pdf" class="cv-iframe"></iframe>
+    </div>
+  </div>
+</div>
+
 <div class="project-modal" id="projectModal">
   <div class="project-modal-inner">
     <div class="project-modal-head">
@@ -88,7 +103,7 @@
     <p class="hero-sub"><span id="typed"></span><span class="cursor">_</span></p>
     <div class="hero-actions">
       <a href="#work" class="btn btn-solid">View Work →</a>
-      <a href="CV_AlexandruCalin.pdf" download class="btn btn-outline">↓ Download CV</a>
+      <button class="btn btn-outline" id="cvBtn">↗ View CV</button>
     </div>
   </div>
 </section>
@@ -273,6 +288,13 @@ document.querySelectorAll('a.project-card').forEach(card=>{
     pmInner.style.background='var(--bg)';
   });
 });
+// ── CV Modal ──
+const cvModal=document.getElementById('cvModal');
+function closeCvModal(){cvModal.classList.remove('active');document.body.style.overflow='';}
+document.getElementById('cvBtn').addEventListener('click',()=>{cvModal.classList.add('active');document.body.style.overflow='hidden';});
+document.getElementById('cvClose').addEventListener('click',closeCvModal);
+cvModal.addEventListener('click',e=>{if(e.target===cvModal)closeCvModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&cvModal.classList.contains('active'))closeCvModal();});
 // ── Scroll reveal ──
 const revealObs=new IntersectionObserver((entries)=>{
   entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('sr-in');revealObs.unobserve(en.target);}});
