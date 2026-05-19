@@ -135,54 +135,9 @@
 <section id="work" class="work-section">
   <div class="section-container">
     <div class="section-num">03 <span class="section-num-label">Work</span></div>
-    <div class="projects-grid">
-      <a href="https://github.com/cfcata03/Chain-Reaction-app" target="_blank" class="project-card" data-detail="Multi-process nuclear chain reaction simulator built in C using fork, pipes, shared memory, and semaphores. Manages concurrent child processes representing neutrons, with real-time statistics on reactions, fissions, and energy output.">
-        <div class="project-meta"><span class="project-num">01</span></div>
-        <h3 class="project-title">chain</h3>
-        <div class="project-tags"><span class="tag">C</span><span class="tag">IPC</span><span class="tag">POSIX</span></div>
-        <span class="project-arrow">↗</span>
-      </a>
-      <a href="https://github.com/cfcata03/wordle" target="_blank" class="project-card" data-detail="A fully functional Wordle clone built with Flask. Features a Python backend handling word validation and game state, and an interactive frontend with color-coded tile feedback, an on-screen keyboard, and streak tracking.">
-        <div class="project-meta"><span class="project-num">02</span></div>
-        <h3 class="project-title">wordle</h3>
-        <div class="project-tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">JavaScript</span></div>
-        <span class="project-arrow">↗</span>
-      </a>
-      <a href="https://github.com/cfcata03/task-manager-terminal" target="_blank" class="project-card" data-detail="Keyboard-driven Kanban task manager that runs entirely in the terminal, built with Python and the Rich library. Supports multiple status columns, priority levels with color coding, task creation and editing, and persistent JSON-based storage.">
-        <div class="project-meta"><span class="project-num">03</span></div>
-        <h3 class="project-title">task manager</h3>
-        <div class="project-tags"><span class="tag">Python</span><span class="tag">Rich</span></div>
-        <span class="project-arrow">↗</span>
-      </a>
-      <a href="https://github.com/cfcata03/arcade" target="_blank" class="project-card" data-detail="Five classic games — Hangman, Blackjack, Battleship, 2048, and Tetris — all running inside one unified terminal app built with Python and curses. Features a main menu, per-game score tracking, and a consistent TUI design across all games.">
-        <div class="project-meta"><span class="project-num">04</span></div>
-        <h3 class="project-title">arcade</h3>
-        <div class="project-tags"><span class="tag">Python</span><span class="tag">curses</span></div>
-        <span class="project-arrow">↗</span>
-      </a>
-      <a href="https://github.com/cfcata03/productivity-timer" target="_blank" class="project-card" data-detail="All-in-one terminal productivity suite built with Python and curses. Includes a Pomodoro timer with configurable intervals, a per-project time tracker, and a habit tracker with daily streak counts — all exportable to CSV.">
-        <div class="project-meta"><span class="project-num">05</span></div>
-        <h3 class="project-title">focus</h3>
-        <div class="project-tags"><span class="tag">Python</span><span class="tag">curses</span></div>
-        <span class="project-arrow">↗</span>
-      </a>
-      <a href="https://github.com/cfcata03/snip" target="_blank" class="project-card" data-detail="Fuzzy TUI snippet manager for saving and searching terminal commands. Features {{placeholder}} substitution filled interactively before running, tag-based filtering, usage tracking that floats most-used snippets to the top, copy-to-clipboard support, and portable plain-JSON storage at ~/.snip/snippets.json.">
-        <div class="project-meta"><span class="project-num">06</span></div>
-        <h3 class="project-title">snip</h3>
-        <div class="project-tags"><span class="tag">Python</span><span class="tag">curses</span><span class="tag">TUI</span></div>
-        <span class="project-arrow">↗</span>
-      </a>
-      <a href="https://github.com/cfcata03/flow" target="_blank" class="project-card" data-detail="Interactive terminal runbook runner. Define multi-step runbooks in plain YAML, search them with fuzzy matching, and walk through each step interactively — with {{placeholder}} substitution collected once and reused across all steps, step-by-step run/skip/quit control, retry on failure, and $EDITOR integration for creating and editing runbooks stored at ~/.flow/runbooks/.">
-        <div class="project-meta"><span class="project-num">07</span></div>
-        <h3 class="project-title">flow</h3>
-        <div class="project-tags"><span class="tag">Python</span><span class="tag">YAML</span><span class="tag">TUI</span></div>
-        <span class="project-arrow">↗</span>
-      </a>
-      <div class="project-card--soon">
-        <div class="project-meta"><span class="project-num">08</span></div>
-        <h3 class="project-title">In Progress <span class="wip-badge">WIP</span></h3>
-        <div class="project-tags"><span class="tag">Coming Soon</span></div>
-      </div>
+    <div class="projects-master">
+      <nav class="proj-list" id="projList"></nav>
+      <div class="proj-detail" id="projDetail"></div>
     </div>
   </div>
 </section>
@@ -438,6 +393,38 @@ function gameLoop(){
   update();
   if(gState==='playing'){renderScene();animId=requestAnimationFrame(gameLoop);}
 }
+// ── Projects master-detail ──
+const PROJECTS=[
+  {num:'01',name:'chain',href:'https://github.com/cfcata03/Chain-Reaction-app',tags:['C','IPC','POSIX'],desc:'Multi-process nuclear chain reaction simulator built in C using fork, pipes, shared memory, and semaphores. Manages concurrent child processes representing neutrons, with real-time statistics on reactions, fissions, and energy output.'},
+  {num:'02',name:'wordle',href:'https://github.com/cfcata03/wordle',tags:['Python','Flask','JavaScript'],desc:'A fully functional Wordle clone built with Flask. Features a Python backend handling word validation and game state, and an interactive frontend with color-coded tile feedback, an on-screen keyboard, and streak tracking.'},
+  {num:'03',name:'task manager',href:'https://github.com/cfcata03/task-manager-terminal',tags:['Python','Rich'],desc:'Keyboard-driven Kanban task manager that runs entirely in the terminal, built with Python and the Rich library. Supports multiple status columns, priority levels with color coding, task creation and editing, and persistent JSON-based storage.'},
+  {num:'04',name:'arcade',href:'https://github.com/cfcata03/arcade',tags:['Python','curses'],desc:'Five classic games — Hangman, Blackjack, Battleship, 2048, and Tetris — all running inside one unified terminal app built with Python and curses. Features a main menu, per-game score tracking, and a consistent TUI design across all games.'},
+  {num:'05',name:'focus',href:'https://github.com/cfcata03/productivity-timer',tags:['Python','curses'],desc:'All-in-one terminal productivity suite built with Python and curses. Includes a Pomodoro timer with configurable intervals, a per-project time tracker, and a habit tracker with daily streak counts — all exportable to CSV.'},
+  {num:'06',name:'snip',href:'https://github.com/cfcata03/snip',tags:['Python','curses','TUI'],desc:'Fuzzy TUI snippet manager for saving and searching terminal commands. Features placeholder substitution filled interactively before running, tag-based filtering, usage tracking that floats most-used snippets to the top, and portable plain-JSON storage.'},
+  {num:'07',name:'flow',href:'https://github.com/cfcata03/flow',tags:['Python','YAML','TUI'],desc:'Interactive terminal runbook runner. Define multi-step runbooks in plain YAML, search them with fuzzy matching, and walk through each step interactively — with placeholder substitution, step-by-step run/skip/quit control, retry on failure, and $EDITOR integration.'},
+  {num:'08',name:'in progress',href:null,tags:['Coming Soon'],desc:'',soon:true},
+];
+let activeProjIdx=0;
+function renderProjDetail(i){
+  const p=PROJECTS[i],el=document.getElementById('projDetail');
+  const tags=p.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+  el.innerHTML=p.soon
+    ?`<div class="proj-card proj-card--soon"><div class="proj-card-num">${p.num}</div><div class="proj-card-title">${p.name} <span class="wip-badge">WIP</span></div><div class="proj-card-tags">${tags}</div></div>`
+    :`<a href="${p.href}" target="_blank" class="proj-card"><div class="proj-card-num">${p.num}</div><div class="proj-card-title">${p.name}</div><div class="proj-card-desc">${p.desc}</div><div class="proj-card-tags">${tags}</div><span class="proj-card-arrow">↗</span></a>`;
+}
+function renderProjList(){
+  const list=document.getElementById('projList');
+  list.innerHTML=PROJECTS.map((p,i)=>`<button class="proj-item${i===activeProjIdx?' active':''}${p.soon?' proj-item--soon':''}" data-i="${i}"><span class="proj-num-sm">${p.num}</span><span class="proj-name-sm">${p.name}</span></button>`).join('');
+  list.querySelectorAll('.proj-item:not(.proj-item--soon)').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      activeProjIdx=+btn.dataset.i;
+      list.querySelectorAll('.proj-item').forEach(b=>b.classList.toggle('active',b===btn));
+      renderProjDetail(activeProjIdx);
+    });
+  });
+}
+renderProjList();
+renderProjDetail(activeProjIdx);
 </script>
 </body>
 </html>

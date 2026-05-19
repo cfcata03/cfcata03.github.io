@@ -101,22 +101,26 @@ section{border-bottom:var(--border);}
 
 /* WORK */
 .work-section{padding:5rem 0;}
-.projects-grid{display:grid;grid-template-columns:1fr;gap:1.25rem;}
-a.project-card{display:block;border:3px solid var(--fg);border-radius:12px;box-shadow:4px 4px 0 var(--fg);padding:2.5rem 2rem;position:relative;transition:background .15s,box-shadow .15s;}
-a.project-card:hover{background:var(--accent);color:#000;box-shadow:2px 2px 0 #000;}
-[data-theme="dark"] a.project-card:hover{background:var(--accent);color:#000;}
-.project-meta{display:flex;align-items:baseline;gap:1rem;margin-bottom:.5rem;}
-.project-num{font-size:3rem;font-weight:700;line-height:1;letter-spacing:-.04em;opacity:.25;}
-.project-title{font-size:1.75rem;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:.75rem;}
+.projects-master{display:flex;gap:2rem;align-items:flex-start;}
+.proj-list{flex:0 0 180px;display:flex;flex-direction:column;gap:.3rem;}
+.proj-item{display:flex;align-items:center;gap:.6rem;padding:.55rem .875rem;border:2px solid transparent;border-radius:999px;background:none;font-family:var(--font);font-size:.78rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;color:var(--fg);width:100%;transition:background .15s,border-color .15s,color .15s;}
+.proj-item:hover:not(.proj-item--soon){border-color:var(--fg);}
+.proj-item.active{background:var(--fg);color:var(--bg);}
+.proj-item--soon{opacity:.4;cursor:default;}
+.proj-num-sm{font-size:.65rem;opacity:.5;flex-shrink:0;letter-spacing:0;}
+.proj-name-sm{flex:1;text-align:left;}
+.proj-detail{flex:1;min-height:280px;}
+.proj-card{display:block;border:3px solid var(--fg);border-radius:12px;box-shadow:4px 4px 0 var(--fg);padding:2.5rem;transition:background .15s,box-shadow .15s;animation:projFadeIn .2s ease;}
+a.proj-card:hover{background:var(--accent);color:#000;box-shadow:2px 2px 0 #000;}
+a.proj-card:hover .proj-card-arrow{transform:translate(4px,-4px);}
+.proj-card-num{font-size:3rem;font-weight:700;letter-spacing:-.04em;opacity:.25;line-height:1;margin-bottom:.25rem;}
+.proj-card-title{font-size:2rem;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:.75rem;}
+.proj-card-desc{font-size:.95rem;line-height:1.7;opacity:.75;max-width:600px;margin-bottom:1.25rem;}
+.proj-card-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem;}
+.proj-card-arrow{font-size:2rem;font-weight:700;display:inline-block;transition:transform .2s;}
+.proj-card--soon{opacity:.4;}
 .wip-badge{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#000;color:var(--accent);padding:2px 8px;border-radius:999px;position:relative;top:-4px;}
-a.project-card:hover .wip-badge{background:var(--accent2);color:#fff;}
-.project-description{font-size:.95rem;line-height:1.7;max-width:700px;margin-bottom:1rem;opacity:.75;}
-.project-tags .tag{border-color:currentColor;}
-.project-arrow{position:absolute;top:2.5rem;right:2rem;font-size:2rem;font-weight:700;transition:transform .2s;}
-a.project-card:hover .project-arrow{transform:translate(4px,-4px);}
-
-/* COMING SOON CARD */
-.project-card--soon{display:block;border:3px solid var(--fg);border-radius:12px;box-shadow:4px 4px 0 var(--fg);padding:2.5rem 2rem;position:relative;opacity:.4;cursor:default;}
+@keyframes projFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
 
 /* CV MODAL */
 .cv-modal{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;z-index:10000;padding:1.5rem;}
@@ -162,7 +166,6 @@ a.project-card:hover .project-arrow{transform:translate(4px,-4px);}
 @media(min-width:768px){
   .skills-grid{grid-template-columns:1fr 1fr 1fr;}
   .skills-grid .skill-card{grid-template-columns:1fr;}
-  .projects-grid{grid-template-columns:1fr 1fr 1fr;}
   .contact-grid{grid-template-columns:1fr 1fr;}
   .nav-links{display:flex;}
   .hamburger{display:none;}
@@ -189,7 +192,11 @@ a.project-card:hover .project-arrow{transform:translate(4px,-4px);}
   .about-block{padding:1.5rem;}
   .skill-card{grid-template-columns:1fr;gap:1rem;padding:1.5rem 1.25rem;}
   .skill-name{font-size:1.2rem;}
-  .project-title{font-size:1.25rem;}
+  .projects-master{flex-direction:column;}
+  .proj-list{flex:none;width:100%;flex-direction:row;flex-wrap:wrap;gap:.375rem;}
+  .proj-item{width:auto;padding:.4rem .75rem;}
+  .proj-num-sm{display:none;}
+  .proj-card-title{font-size:1.4rem;}
   .project-num{font-size:2rem;}
   a.project-card{padding:1.75rem 1.25rem;}
   .project-arrow{font-size:1.5rem;top:1.75rem;right:1.25rem;}
