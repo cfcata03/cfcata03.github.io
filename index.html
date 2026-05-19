@@ -254,19 +254,6 @@ const revealObs=new IntersectionObserver((entries)=>{
   entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('sr-in');revealObs.unobserve(en.target);}});
 },{threshold:0.08});
 document.querySelectorAll('section[id]').forEach(s=>{s.classList.add('sr');revealObs.observe(s);});
-// ── Name tilt ──
-const heroName=document.querySelector('.hero-name');
-heroName.addEventListener('mousemove',e=>{
-  const r=heroName.getBoundingClientRect();
-  const rx=-((e.clientY-r.top-r.height/2)/r.height)*4;
-  const ry=((e.clientX-r.left-r.width/2)/r.width)*5;
-  heroName.style.transition='transform .05s ease';
-  heroName.style.transform=`perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-});
-heroName.addEventListener('mouseleave',()=>{
-  heroName.style.transition='transform 1.2s cubic-bezier(.22,.61,.36,1)';
-  heroName.style.transform='';
-});
 // ── Breakout AC ──
 const gameBtn=document.getElementById('gameBtn'),gameModal=document.getElementById('gameModal');
 let gc,ctx,paddle,ball,bricks,score,lives,bestScore=0,level,gState,animId;
