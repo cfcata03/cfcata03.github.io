@@ -404,18 +404,50 @@ const PROJECTS=[
   {num:'07',name:'flow',href:'https://github.com/cfcata03/flow',tags:['Python','YAML','TUI'],desc:'Interactive terminal runbook runner. Define multi-step runbooks in plain YAML, search them with fuzzy matching, and walk through each step interactively — with placeholder substitution, step-by-step run/skip/quit control, retry on failure, and $EDITOR integration.'},
   {num:'08',name:'in progress',href:null,tags:['Coming Soon'],desc:'',soon:true},
 ];
-let activeProjIdx=0;
+let activeProjIdx=0,wipTimer=null;
+function clearWip(){if(wipTimer){clearTimeout(wipTimer);wipTimer=null;}}
+const WIP_LINES=[
+  `<span class="wip-prompt">$</span> git init new-project`,
+  `<span class="wip-prompt">$</span> touch main.py`,
+  `<span class="wip-cmt"># TODO: have a brilliant idea</span>`,
+  `<span class="wip-kw">def</span> <span class="wip-fn">build_something</span>():`,
+  `    progress = <span class="wip-num">0</span>`,
+  `    <span class="wip-kw">while</span> progress &lt; <span class="wip-num">100</span>:`,
+  `        <span class="wip-fn">drink</span>(coffee)  <span class="wip-cmt"># ☕</span>`,
+  `        <span class="wip-fn">write_code</span>()`,
+  `        progress += <span class="wip-fn">random</span>()`,
+  `<span class="wip-cmt"># still cooking... check back soon</span>`,
+];
+function startWipAnimation(){
+  const el=document.getElementById('wipCode');
+  if(!el)return;
+  el.innerHTML='';
+  let idx=0;
+  function addLine(){
+    if(!document.getElementById('wipCode'))return;
+    if(idx>=WIP_LINES.length){wipTimer=setTimeout(()=>{el.innerHTML='';idx=0;addLine();},2200);return;}
+    const span=document.createElement('span');
+    span.className='wip-line';
+    span.innerHTML=WIP_LINES[idx];
+    el.appendChild(span);
+    idx++;
+    wipTimer=setTimeout(addLine,210);
+  }
+  addLine();
+}
 function renderProjDetail(i){
+  clearWip();
   const p=PROJECTS[i],el=document.getElementById('projDetail');
   const tags=p.tags.map(t=>`<span class="tag">${t}</span>`).join('');
   el.innerHTML=p.soon
-    ?`<div class="proj-card proj-card--soon"><div class="proj-card-num">${p.num}</div><div class="proj-card-title">${p.name} <span class="wip-badge">WIP</span></div><div class="proj-card-tags">${tags}</div></div>`
+    ?`<div class="proj-card proj-card--soon"><div class="proj-card-num">${p.num}</div><div class="proj-card-title">${p.name} <span class="wip-badge">WIP</span></div><div class="wip-terminal"><div class="wip-terminal-bar"><span class="wip-dot wip-dot--red"></span><span class="wip-dot wip-dot--yellow"></span><span class="wip-dot wip-dot--green"></span><span class="wip-terminal-title">build.py</span></div><div class="wip-code" id="wipCode"></div></div></div>`
     :`<a href="${p.href}" target="_blank" class="proj-card"><div class="proj-card-num">${p.num}</div><div class="proj-card-title">${p.name}</div><div class="proj-card-desc">${p.desc}</div><div class="proj-card-tags">${tags}</div><span class="proj-card-arrow">↗</span></a>`;
+  if(p.soon)startWipAnimation();
 }
 function renderProjList(){
   const list=document.getElementById('projList');
   list.innerHTML=PROJECTS.map((p,i)=>`<button class="proj-item${i===activeProjIdx?' active':''}${p.soon?' proj-item--soon':''}" data-i="${i}"><span class="proj-num-sm">${p.num}</span><span class="proj-name-sm">${p.name}</span></button>`).join('');
-  list.querySelectorAll('.proj-item:not(.proj-item--soon)').forEach(btn=>{
+  list.querySelectorAll('.proj-item').forEach(btn=>{
     btn.addEventListener('click',()=>{
       activeProjIdx=+btn.dataset.i;
       list.querySelectorAll('.proj-item').forEach(b=>b.classList.toggle('active',b===btn));
