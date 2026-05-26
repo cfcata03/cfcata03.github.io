@@ -4,11 +4,10 @@
 
 **Engineering Student · Polytechnic University of Bucharest**
 
-[![Portfolio](https://img.shields.io/badge/Portfolio-cfcata03.github.io-7c3aed?style=flat-square&logo=google-chrome&logoColor=white)](https://cfcata03.github.io)
+[![Portfolio](https://img.shields.io/badge/Portfolio-cfcata03.github.io-000000?style=flat-square&logo=google-chrome&logoColor=white)](https://cfcata03.github.io)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Alexandru%20Calin-0a66c2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alexandru-calin-976050287/)
-[![Instagram](https://img.shields.io/badge/Instagram-@cefacicata-e1306c?style=flat-square&logo=instagram&logoColor=white)](https://instagram.com/cefacicata)
 
-*Bucharest, Romania 🇷🇴*
+*Bucharest, Romania*
 
 </div>
 
@@ -16,7 +15,7 @@
 
 ### About Me
 
-I'm a software engineering student passionate about web & software development. I build practical projects ranging from low-level systems programming to full-stack web apps — and sometimes games just for fun.
+Software engineering student at Polytechnic University of Bucharest. I build practical projects across systems programming, terminal tooling, and web development — and occasionally a game for fun.
 
 ---
 
@@ -35,30 +34,32 @@ I'm a software engineering student passionate about web & software development. 
 
 ![HTML](https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=css3&logoColor=white)
-![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=flat-square&logo=vuedotjs&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white)
-![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat-square&logo=linux&logoColor=black)
 
 ---
 
-### Featured Projects
+### Projects
 
 | # | Project | Stack | Description |
 |---|---------|-------|-------------|
-| 01 | [**Chain Reaction Simulator**](https://github.com/cfcata03/Chain-Reaction-app) | C · IPC · POSIX | Multi-process nuclear chain reaction simulator with real-time stats and concurrent process management |
-| 02 | [**Wordle**](https://github.com/cfcata03/wordle) | Python · Flask · JS | Fully functional Wordle clone with Python backend and interactive frontend |
-| 03 | [**Task Manager App**](https://github.com/cfcata03/task-manager-app) | Vue.js · Firebase · PWA | Streamlined productivity tool with real-time collaboration |
-| 04 | [**Minecraft Server Manager**](https://github.com/cfcata03/Minecraft-Server-Manager-App) | Java · Python · MySQL | Server management app with player tracking, world backups, and plugin config |
+| 01 | [**chain**](https://github.com/cfcata03/Chain-Reaction-app) | C · IPC · POSIX | Multi-process nuclear chain reaction simulator using fork, pipes, shared memory, and semaphores |
+| 02 | [**wordle**](https://github.com/cfcata03/wordle) | Python · Flask · JavaScript | Fully functional Wordle clone with Python backend and interactive frontend |
+| 03 | [**task manager**](https://github.com/cfcata03/task-manager-terminal) | Python · Rich | Keyboard-driven Kanban task manager running entirely in the terminal |
+| 04 | [**arcade**](https://github.com/cfcata03/arcade) | Python · curses | Five classic games — Hangman, Blackjack, Battleship, 2048, and Tetris — in one unified terminal app |
+| 05 | [**focus**](https://github.com/cfcata03/productivity-timer) | Python · curses | All-in-one terminal productivity suite: Pomodoro timer, time tracker, and habit tracker |
+| 06 | [**snip**](https://github.com/cfcata03/snip) | Python · curses | Fuzzy TUI snippet manager for saving, searching, and running terminal commands |
+| 07 | [**flow**](https://github.com/cfcata03/flow) | Python · YAML | Interactive terminal runbook runner with fuzzy search and step-by-step execution |
+| 08 | [**weather**](https://github.com/cfcata03/weather-dashboard-terminal) | Python · curses | Terminal weather dashboard with current conditions, hourly forecast, and 7-day outlook |
 
 ---
 
 <div align="center">
 
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=cfcata03&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=7c3aed&icon_color=f59e0b&text_color=e5e7eb)
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=cfcata03&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=ffe500&icon_color=ffe500&text_color=e5e7eb)
 
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=cfcata03&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=7c3aed&text_color=e5e7eb)
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=cfcata03&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=ffe500&text_color=e5e7eb)
 
 </div>
