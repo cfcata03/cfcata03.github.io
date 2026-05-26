@@ -46,9 +46,22 @@
 
 <div class="game-modal" id="gameModal">
   <div class="game-container">
-    <div class="game-header"><h2>Breakout AC</h2><button class="game-close" id="gameClose">✕</button></div>
-    <canvas id="gameCanvas" width="400" height="500"></canvas>
-    <div class="game-info"><span>SCORE: <span id="gameScore">0</span></span><span>LIVES: <span id="gameLives">♥ ♥ ♥</span></span></div>
+    <div class="game-header"><h2>Type Racer</h2><button class="game-close" id="gameClose">✕</button></div>
+    <div class="typer-wrap" id="typerWrap">
+      <div class="typer-hud">
+        <span class="typer-timer" id="typerTime">30</span>
+        <span class="typer-live"><span>WPM <b id="typerWpm">—</b></span><span>ACC <b id="typerAcc">—</b></span></span>
+      </div>
+      <div class="typer-words" id="typerWords"></div>
+      <input class="typer-input" id="typerInput" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off">
+      <div class="typer-overlay" id="typerOverlay">
+        <div class="typer-ol-title" id="typerOlTitle">TYPE RACER</div>
+        <div class="typer-ol-result" id="typerOlResult" style="display:none"></div>
+        <div class="typer-ol-sub" id="typerOlSub">30 seconds · tab to restart</div>
+        <button class="typer-ol-btn" id="typerStart">START</button>
+        <div class="typer-ol-best" id="typerBest"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -209,190 +222,134 @@ const revealObs=new IntersectionObserver((entries)=>{
   entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('sr-in');revealObs.unobserve(en.target);}});
 },{threshold:0.08});
 document.querySelectorAll('section[id]').forEach(s=>{s.classList.add('sr');revealObs.observe(s);});
-// ── Breakout AC ──
+// ── Type Racer ──
 const gameBtn=document.getElementById('gameBtn'),gameModal=document.getElementById('gameModal');
-let gc,ctx,paddle,ball,bricks,score,lives,bestScore=0,level,gState,animId;
-const COLS=8,ROWS=6,BW=42,BH=14,BGAP=4;
-const BSX=Math.round((400-(COLS*(BW+BGAP)-BGAP))/2),BSY=52;
-const ROWCOL=['#ff3b00','#ff3b00','#ffe500','#ffe500',null,null];
-const ROWPTS=[3,3,2,2,1,1];
+let tWords=[],tWordIdx=0,tTyped='',tCorrectWords=0,tAttempted=0,tTimeLeft=30,tTimerId=null,tRunning=false,tBestWpm=0;
 
-gameBtn.addEventListener('click',()=>{gameModal.classList.add('active');initGame();});
+const TPOOL=[...'function const return async await import export class type array string number boolean null undefined promise callback scope loop switch break continue error stack render state props hook effect context component router middleware endpoint request response server client database query schema token session cache index hash algorithm recursion variable constant method prototype compile runtime memory thread socket event parse validate throttle singleton observer the be to of and a in that have it for not on with he as you do at this but by from they we say she or an will one all would there their what so up out if about who get which go me when make can like time no just know take into year your good some could them see other than then now look only come its over think also back after use how our work first well way even new want because any these give day most great between need large often real feel talk soon family leave measure door book step true during remember fast travel morning simple slow love money serve road rain rule pull cold force blue decide deep moon foot system busy record boat common gold possible plane wonder laugh thousand ago check game shape hot miss heat bring yes fill paint language grand ball wave drop heart present heavy dance engine alone draw describe plant straight century outside everything tall already school point special count hard science often'.split(' ')];
+
+function rngWords(n){const a=[...TPOOL];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,n);}
+
+function initTyper(){
+  tWords=rngWords(80);tWordIdx=0;tTyped='';tCorrectWords=0;tAttempted=0;
+  tTimeLeft=30;tRunning=false;clearInterval(tTimerId);
+  document.getElementById('typerTime').textContent='30';
+  document.getElementById('typerTime').classList.remove('low');
+  document.getElementById('typerWpm').textContent='—';
+  document.getElementById('typerAcc').textContent='—';
+  const inp=document.getElementById('typerInput');inp.value='';
+  document.getElementById('typerWords').scrollTop=0;
+  renderTyperWords();
+  showTyperOverlay(false);
+}
+
+function showTyperOverlay(done,wpm,acc){
+  const ol=document.getElementById('typerOverlay');
+  ol.style.display='flex';
+  if(done){
+    const nb=wpm>tBestWpm&&wpm>0;if(nb)tBestWpm=wpm;
+    document.getElementById('typerOlTitle').textContent=nb?'NEW BEST!':'DONE';
+    const res=document.getElementById('typerOlResult');res.style.display='flex';
+    res.innerHTML=`<div class="tor-item"><span class="tor-val">${wpm}</span><span class="tor-lbl">WPM</span></div><div class="tor-item"><span class="tor-val">${acc}%</span><span class="tor-lbl">ACC</span></div>`;
+    document.getElementById('typerOlSub').textContent='tab to restart';
+    document.getElementById('typerStart').textContent='PLAY AGAIN';
+    document.getElementById('typerBest').textContent=tBestWpm>0&&!nb?`BEST: ${tBestWpm} WPM`:'';
+  } else {
+    document.getElementById('typerOlTitle').textContent='TYPE RACER';
+    document.getElementById('typerOlResult').style.display='none';
+    document.getElementById('typerOlSub').textContent='30 seconds · tab to restart';
+    document.getElementById('typerStart').textContent='START';
+    document.getElementById('typerBest').textContent=tBestWpm>0?`BEST: ${tBestWpm} WPM`:'';
+  }
+  document.getElementById('typerStart').onclick=startTyper;
+}
+
+function startTyper(){
+  document.getElementById('typerOverlay').style.display='none';
+  document.getElementById('typerInput').focus();
+  tRunning=true;
+  tTimerId=setInterval(()=>{
+    tTimeLeft--;
+    const tEl=document.getElementById('typerTime');
+    tEl.textContent=tTimeLeft;
+    if(tTimeLeft<=5)tEl.classList.add('low');
+    refreshLiveStats();
+    if(tTimeLeft<=0)endTyper();
+  },1000);
+}
+
+function refreshLiveStats(){
+  const elapsed=30-tTimeLeft;
+  if(elapsed===0||tAttempted===0)return;
+  document.getElementById('typerWpm').textContent=Math.round(tCorrectWords/(elapsed/60));
+  document.getElementById('typerAcc').textContent=Math.round((tCorrectWords/tAttempted)*100)+'%';
+}
+
+function endTyper(){
+  clearInterval(tTimerId);tRunning=false;
+  const wpm=Math.round(tCorrectWords/0.5);
+  const acc=Math.round((tCorrectWords/Math.max(1,tAttempted))*100);
+  showTyperOverlay(true,wpm,acc);
+}
+
+function renderTyperWords(){
+  const el=document.getElementById('typerWords');
+  let html='';
+  tWords.forEach((word,wi)=>{
+    if(wi<tWordIdx){
+      html+=`<span class="tw tw-done">${word} </span>`;
+    } else if(wi===tWordIdx){
+      let chars='';
+      for(let ci=0;ci<word.length;ci++){
+        if(ci<tTyped.length) chars+=`<span class="${tTyped[ci]===word[ci]?'tc-ok':'tc-err'}">${word[ci]}</span>`;
+        else if(ci===tTyped.length) chars+=`<span class="tc-cur">${word[ci]}</span>`;
+        else chars+=`<span>${word[ci]}</span>`;
+      }
+      if(tTyped.length>=word.length){
+        if(tTyped.length>word.length) chars+=`<span class="tc-err">${tTyped.slice(word.length)}</span>`;
+        chars+=`<span class="tc-cur-end"></span>`;
+      }
+      html+=`<span class="tw" id="twCur">${chars} </span>`;
+    } else {
+      html+=`<span class="tw">${word} </span>`;
+    }
+  });
+  el.innerHTML=html;
+  const cur=document.getElementById('twCur');
+  if(cur){
+    const lh=parseFloat(getComputedStyle(el).lineHeight)||36;
+    if(cur.getBoundingClientRect().top-el.getBoundingClientRect().top>=lh*2.1) el.scrollTop+=lh;
+  }
+}
+
+document.getElementById('typerInput').addEventListener('input',function(){
+  if(!tRunning)return;
+  const val=this.value;
+  if(val.endsWith(' ')){
+    const typed=val.trimEnd();
+    if(!typed.length){this.value='';return;}
+    tAttempted++;
+    if(typed===tWords[tWordIdx])tCorrectWords++;
+    tWordIdx++;tTyped='';this.value='';
+    if(tWordIdx>=tWords.length)endTyper();
+  } else {
+    tTyped=val;
+  }
+  renderTyperWords();
+  refreshLiveStats();
+});
+
+document.getElementById('typerWrap').addEventListener('click',()=>{if(tRunning)document.getElementById('typerInput').focus();});
+
+gameBtn.addEventListener('click',()=>{gameModal.classList.add('active');initTyper();});
 document.getElementById('gameClose').addEventListener('click',()=>{
-  gameModal.classList.remove('active');gState='idle';if(animId)cancelAnimationFrame(animId);
+  gameModal.classList.remove('active');clearInterval(tTimerId);tRunning=false;
 });
 document.addEventListener('keydown',e=>{
   if(!gameModal.classList.contains('active'))return;
-  if(e.code==='Space'){e.preventDefault();if(gState!=='playing')handleClick();return;}
-  if(paddle){
-    if(e.code==='ArrowLeft'||e.code==='KeyA')paddle.dx=-paddle.spd;
-    if(e.code==='ArrowRight'||e.code==='KeyD')paddle.dx=paddle.spd;
-  }
+  if(e.key==='Tab'){e.preventDefault();initTyper();}
+  if(e.key==='Escape'){gameModal.classList.remove('active');clearInterval(tTimerId);tRunning=false;}
 });
-document.addEventListener('keyup',e=>{
-  if(paddle&&(e.code==='ArrowLeft'||e.code==='KeyA'||e.code==='ArrowRight'||e.code==='KeyD'))paddle.dx=0;
-});
-
-function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v));}
-
-function initGame(){
-  gc=document.getElementById('gameCanvas');ctx=gc.getContext('2d');
-  score=0;lives=3;level=1;
-  paddle={x:160,y:460,w:80,h:12,spd:6,dx:0};
-  resetBall();
-  createBricks();
-  gState='start';
-  updateUI();
-  renderScene();
-  drawOverlay('BREAKOUT AC','CLICK TO START');
-  gc.onclick=handleClick;
-  gc.onmousemove=e=>{
-    const r=gc.getBoundingClientRect();
-    const mx=(e.clientX-r.left)*(gc.width/r.width);
-    paddle.x=clamp(mx-paddle.w/2,0,gc.width-paddle.w);
-    if(gState!=='playing'){ball.x=paddle.x+paddle.w/2;renderScene();
-      const t=gState==='start'?'BREAKOUT AC':gState==='paused'?lives+' LIVES LEFT':'LEVEL '+level;
-      const s=gState==='start'?'CLICK TO START':'CLICK TO CONTINUE';
-      drawOverlay(t,s);}
-  };
-  gc.ontouchmove=e=>{
-    e.preventDefault();
-    const r=gc.getBoundingClientRect();
-    const mx=(e.touches[0].clientX-r.left)*(gc.width/r.width);
-    paddle.x=clamp(mx-paddle.w/2,0,gc.width-paddle.w);
-    if(gState!=='playing')ball.x=paddle.x+paddle.w/2;
-  },{passive:false};
-}
-
-function resetBall(){
-  const spd=Math.min(7,4.2+((level||1)-1)*0.4);
-  const ang=(Math.random()-.5)*0.8;
-  ball={x:paddle?paddle.x+paddle.w/2:200,y:paddle?paddle.y-10:442,r:6,vx:spd*Math.sin(ang),vy:-spd*Math.cos(ang)};
-}
-
-function createBricks(){
-  bricks=[];
-  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)
-    bricks.push({x:BSX+c*(BW+BGAP),y:BSY+r*(BH+BGAP),w:BW,h:BH,col:ROWCOL[r],pts:ROWPTS[r],alive:true});
-}
-
-function updateUI(){
-  document.getElementById('gameScore').textContent=score;
-  document.getElementById('gameLives').textContent=Array.from({length:Math.max(0,lives)},()=>'♥').join(' ')||'—';
-}
-
-function handleClick(){
-  if(gState==='start'||gState==='paused'||gState==='levelup'){
-    if(gState==='levelup')createBricks();
-    gState='playing';
-    if(animId)cancelAnimationFrame(animId);
-    gameLoop();
-  } else if(gState==='gameover'){
-    score=0;lives=3;level=1;
-    paddle.x=160;paddle.dx=0;
-    resetBall();createBricks();updateUI();
-    gState='start';
-    renderScene();
-    drawOverlay('BREAKOUT AC','CLICK TO START');
-  }
-}
-
-function renderScene(){
-  const W=gc.width,H=gc.height,isDark=document.documentElement.getAttribute('data-theme')==='dark';
-  const fg=isDark?'#f0f0f0':'#000';
-  ctx.fillStyle=isDark?'#111':'#f5f5f5';ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle=isDark?'rgba(255,255,255,.04)':'rgba(0,0,0,.04)';ctx.lineWidth=1;
-  for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-  for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-  // bricks
-  bricks.forEach(b=>{
-    if(!b.alive)return;
-    ctx.fillStyle=b.col||fg;ctx.fillRect(b.x,b.y,b.w,b.h);
-    ctx.strokeStyle=isDark?'rgba(255,255,255,.2)':'rgba(0,0,0,.18)';ctx.lineWidth=1;
-    ctx.strokeRect(b.x+.5,b.y+.5,b.w-1,b.h-1);
-  });
-  // paddle
-  ctx.fillStyle='#ffe500';ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
-  ctx.strokeStyle=fg;ctx.lineWidth=2;ctx.strokeRect(paddle.x,paddle.y,paddle.w,paddle.h);
-  // ball
-  ctx.fillStyle=fg;ctx.fillRect(ball.x-ball.r,ball.y-ball.r,ball.r*2,ball.r*2);
-}
-
-function drawOverlay(title,sub){
-  const W=gc.width,H=gc.height,isDark=document.documentElement.getAttribute('data-theme')==='dark';
-  ctx.fillStyle=isDark?'rgba(17,17,17,.72)':'rgba(245,245,245,.72)';ctx.fillRect(0,0,W,H);
-  ctx.textAlign='center';
-  ctx.font='bold 34px "Space Grotesk",sans-serif';
-  ctx.fillStyle=isDark?'#f0f0f0':'#000';ctx.fillText(title,W/2,H/2-38);
-  ctx.fillStyle='#ffe500';ctx.fillRect(W/2-80,H/2-14,160,36);
-  ctx.font='bold 12px "Space Grotesk",sans-serif';ctx.fillStyle='#000';ctx.fillText(sub,W/2,H/2+10);
-  if(bestScore>0&&gState==='start'){ctx.font='bold 11px "Space Grotesk",sans-serif';ctx.fillStyle=isDark?'rgba(240,240,240,.35)':'rgba(0,0,0,.3)';ctx.fillText('BEST: '+bestScore,W/2,H/2+52);}
-}
-
-function update(){
-  // keyboard paddle movement
-  paddle.x=clamp(paddle.x+paddle.dx,0,gc.width-paddle.w);
-  if(gState!=='playing')return;
-  const W=gc.width,H=gc.height;
-  ball.x+=ball.vx;ball.y+=ball.vy;
-  // walls
-  if(ball.x-ball.r<0){ball.x=ball.r;ball.vx=Math.abs(ball.vx);}
-  if(ball.x+ball.r>W){ball.x=W-ball.r;ball.vx=-Math.abs(ball.vx);}
-  if(ball.y-ball.r<0){ball.y=ball.r;ball.vy=Math.abs(ball.vy);}
-  // paddle collision
-  if(ball.vy>0&&ball.y+ball.r>=paddle.y&&ball.y-ball.r<=paddle.y+paddle.h
-     &&ball.x>=paddle.x-ball.r&&ball.x<=paddle.x+paddle.w+ball.r){
-    ball.y=paddle.y-ball.r;
-    const rel=(ball.x-(paddle.x+paddle.w/2))/(paddle.w/2);
-    const spd=Math.sqrt(ball.vx**2+ball.vy**2);
-    ball.vx=spd*Math.sin(rel*1.1);
-    ball.vy=-Math.abs(spd*Math.cos(rel*1.1));
-  }
-  // brick collisions
-  for(const b of bricks){
-    if(!b.alive)continue;
-    if(ball.x+ball.r>b.x&&ball.x-ball.r<b.x+b.w&&ball.y+ball.r>b.y&&ball.y-ball.r<b.y+b.h){
-      b.alive=false;score+=b.pts;updateUI();
-      const overL=ball.x+ball.r-b.x,overR=b.x+b.w-(ball.x-ball.r);
-      const overT=ball.y+ball.r-b.y,overB=b.y+b.h-(ball.y-ball.r);
-      if(Math.min(overL,overR)<Math.min(overT,overB))ball.vx*=-1;else ball.vy*=-1;
-      break;
-    }
-  }
-  // bottom — lose life
-  if(ball.y-ball.r>H){
-    lives--;updateUI();
-    if(lives<=0){doGameOver();return;}
-    gState='paused';
-    resetBall();ball.x=paddle.x+paddle.w/2;ball.y=paddle.y-ball.r-2;
-    renderScene();drawOverlay(lives+' LIVES LEFT','CLICK TO CONTINUE');
-    return;
-  }
-  // clear level
-  if(bricks.every(b=>!b.alive)){
-    level++;gState='levelup';
-    resetBall();ball.x=paddle.x+paddle.w/2;ball.y=paddle.y-ball.r-2;
-    renderScene();drawOverlay('LEVEL '+level,'CLICK TO CONTINUE');
-  }
-}
-
-function doGameOver(){
-  gState='gameover';
-  if(score>bestScore)bestScore=score;
-  const W=gc.width,H=gc.height;
-  ctx.fillStyle='rgba(255,59,0,.93)';ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='#000';ctx.textAlign='center';
-  ctx.font='bold 34px "Space Grotesk",sans-serif';ctx.fillText('GAME OVER',W/2,H/2-50);
-  ctx.font='bold 20px "Space Grotesk",sans-serif';ctx.fillText('SCORE: '+score,W/2,H/2);
-  if(score===bestScore&&score>0){ctx.font='bold 13px "Space Grotesk",sans-serif';ctx.fillStyle='#ffe500';ctx.fillText('NEW BEST!',W/2,H/2+30);}
-  else if(bestScore>0){ctx.font='13px "Space Grotesk",sans-serif';ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillText('BEST: '+bestScore,W/2,H/2+30);}
-  ctx.font='bold 12px "Space Grotesk",sans-serif';ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillText('CLICK TO RESTART',W/2,H/2+68);
-}
-
-function gameLoop(){
-  update();
-  if(gState==='playing'){renderScene();animId=requestAnimationFrame(gameLoop);}
-}
 // ── Projects master-detail ──
 const PROJECTS=[
   {num:'01',name:'chain',href:'https://github.com/cfcata03/Chain-Reaction-app',tags:['C','IPC','POSIX'],desc:'Multi-process nuclear chain reaction simulator built in C using fork, pipes, shared memory, and semaphores. Manages concurrent child processes representing neutrons, with real-time statistics on reactions, fissions, and energy output.'},
