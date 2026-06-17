@@ -1,421 +1,912 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alexandru Calin — Portfolio</title>
-<meta name="description" content="Engineering student at Polytechnic University of Bucharest. Web & software developer building practical projects with Python, C++, and web technologies.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alexandru Calin — Portfolio</title>
+  <meta name="description" content="Engineering student at Polytechnic University of Bucharest. Web & software developer building practical projects with Python, C++, and web technologies.">
 
-<!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://cfcata03.github.io/">
-<meta property="og:title" content="Alexandru Calin — Portfolio">
-<meta property="og:description" content="Engineering student at Polytechnic University of Bucharest. Web & software developer building practical projects with Python, C++, and web technologies.">
-<meta property="og:image" content="https://cfcata03.github.io/og-image.png">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cfcata03.github.io/">
+  <meta property="og:title" content="Alexandru Calin — Portfolio">
+  <meta property="og:description" content="Engineering student at Polytechnic University of Bucharest. Web & software developer building practical projects with Python, C++, and web technologies.">
+  <meta property="og:image" content="https://cfcata03.github.io/og-image.png">
 
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://cfcata03.github.io/">
-<meta name="twitter:title" content="Alexandru Calin — Portfolio">
-<meta name="twitter:description" content="Engineering student at Polytechnic University of Bucharest. Web & software developer building practical projects with Python, C++, and web technologies.">
-<meta name="twitter:image" content="https://cfcata03.github.io/og-image.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://cfcata03.github.io/">
+  <meta name="twitter:title" content="Alexandru Calin — Portfolio">
+  <meta name="twitter:description" content="Engineering student at Polytechnic University of Bucharest. Web & software developer building practical projects with Python, C++, and web technologies.">
+  <meta name="twitter:image" content="https://cfcata03.github.io/og-image.png">
 
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<div id="loadingScreen"><div class="load-text">AC</div></div>
-
-<div class="cv-modal" id="cvModal">
-  <div class="cv-modal-inner">
-    <div class="cv-modal-head">
-      <span class="cv-modal-title">CV — Alexandru Calin</span>
-      <div class="cv-modal-actions">
-        <a href="CV_AlexandruCalin.pdf" download class="btn btn-solid" style="padding:.5rem 1.25rem;font-size:.8rem;">↓ Download</a>
-        <button id="cvClose" class="pm-close">✕</button>
-      </div>
-    </div>
-    <div class="cv-modal-body">
-      <iframe src="CV_AlexandruCalin.pdf" class="cv-iframe"></iframe>
-    </div>
+  <div id="codeBg" aria-hidden="true"></div>
+  <div id="loadingScreen">
+    <div class="load-text">AC</div>
   </div>
-</div>
 
-
-
-<div class="game-modal" id="gameModal">
-  <div class="game-container">
-    <div class="game-header"><h2>Type Racer</h2><button class="game-close" id="gameClose">✕</button></div>
-    <div class="typer-wrap" id="typerWrap">
-      <div class="typer-hud">
-        <span class="typer-timer" id="typerTime">30</span>
-        <span class="typer-live"><span>WPM <b id="typerWpm">—</b></span><span>ACC <b id="typerAcc">—</b></span></span>
-      </div>
-      <div class="typer-words" id="typerWords"></div>
-      <input class="typer-input" id="typerInput" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off">
-      <div class="typer-overlay" id="typerOverlay">
-        <div class="typer-ol-title" id="typerOlTitle">TYPE RACER</div>
-        <div class="typer-ol-result" id="typerOlResult" style="display:none"></div>
-        <div class="typer-ol-sub" id="typerOlSub">30 seconds · tab to restart</div>
-        <button class="typer-ol-btn" id="typerStart">START</button>
-        <div class="typer-ol-best" id="typerBest"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<nav class="navbar">
-  <div class="nav-content">
-    <div class="nav-logo">A<span>C</span></div>
-    <div class="nav-links">
-      <a href="#about" class="nav-link">About</a>
-      <a href="#skills" class="nav-link">Skills</a>
-      <a href="#work" class="nav-link">Work</a>
-      <a href="#contact" class="nav-link">Contact</a>
-    </div>
-    <div class="nav-right">
-      <button class="btn-nav" id="gameBtn">▶ Play</button>
-      <button class="btn-nav" id="themeToggle">
-        <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      </button>
-      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
-    </div>
-  </div>
-</nav>
-
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#about" class="mobile-link">About</a>
-  <a href="#skills" class="mobile-link">Skills</a>
-  <a href="#work" class="mobile-link">Work</a>
-  <a href="#contact" class="mobile-link">Contact</a>
-</div>
-
-<main>
-<section class="hero">
-  <div class="hero-bg-num">AC</div>
-  <div class="section-container">
-    <a href="https://www.linkedin.com/in/alexandru-calin-976050287/" target="_blank" class="hero-label">Open to work ↗</a>
-    <h1 class="hero-name">Alexandru<em>Calin</em></h1>
-    <p class="hero-sub"><span id="typed"></span><span class="cursor">_</span></p>
-    <div class="hero-actions">
-      <a href="#work" class="btn btn-solid">View Work →</a>
-      <button class="btn btn-outline" id="cvBtn">↗ View CV</button>
-    </div>
-  </div>
-</section>
-
-<section id="about" class="about-section">
-  <div class="section-container">
-    <div class="section-num">01 <span class="section-num-label">About</span></div>
-    <div class="about-grid">
-      <div class="about-block">
-        <p>Engineering student at <strong>Polytechnic University of Bucharest</strong> passionate about web &amp; software development.</p>
-        <p>Proficient in Python, C++/C/C#, and web technologies. I build practical projects and continuously explore new technologies, focusing on applying my skills to create real-world solutions.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="skills" class="skills-section">
-  <div class="section-container">
-    <div class="section-num">02 <span class="section-num-label">Skills</span></div>
-    <div class="skills-grid">
-      <div class="skill-card">
-        <div class="skill-name">Languages</div>
-        <div class="skill-tags">
-          <span class="tag">Python</span><span class="tag">C</span><span class="tag">C++</span>
-          <span class="tag">C#</span><span class="tag">Java</span><span class="tag">JavaScript</span>
+  <div class="cv-modal" id="cvModal">
+    <div class="cv-modal-inner">
+      <div class="cv-modal-head">
+        <span class="cv-modal-title">CV — Alexandru Calin</span>
+        <div class="cv-modal-actions">
+          <a href="CV_AlexandruCalin.pdf" download class="btn btn-solid" style="padding:.5rem 1.25rem;font-size:.8rem;">↓ Download</a>
+          <button id="cvClose" class="pm-close">✕</button>
         </div>
       </div>
-      <div class="skill-card">
-        <div class="skill-name">Web</div>
-        <div class="skill-tags">
-          <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">Vue.js</span><span class="tag">Firebase</span>
-        </div>
+      <div class="cv-modal-body">
+        <iframe src="CV_AlexandruCalin.pdf" class="cv-iframe"></iframe>
       </div>
-      <div class="skill-card">
-        <div class="skill-name">Tools</div>
-        <div class="skill-tags">
-          <span class="tag">Git</span><span class="tag">Linux</span><span class="tag">POSIX</span><span class="tag">MySQL</span>
+    </div>
+  </div>
+
+
+
+  <div class="game-modal" id="gameModal">
+    <div class="game-container">
+      <div class="game-header">
+        <h2>Type Racer</h2><button class="game-close" id="gameClose">✕</button>
+      </div>
+      <div class="typer-wrap" id="typerWrap">
+        <div class="typer-hud">
+          <span class="typer-timer" id="typerTime">30</span>
+          <span class="typer-live"><span>WPM <b id="typerWpm">—</b></span><span>ACC <b id="typerAcc">—</b></span></span>
+        </div>
+        <div class="typer-words" id="typerWords"></div>
+        <input class="typer-input" id="typerInput" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off">
+        <div class="typer-overlay" id="typerOverlay">
+          <div class="typer-ol-title" id="typerOlTitle">TYPE RACER</div>
+          <div class="typer-ol-result" id="typerOlResult" style="display:none"></div>
+          <div class="typer-ol-sub" id="typerOlSub">30 seconds · tab to restart</div>
+          <button class="typer-ol-btn" id="typerStart">START</button>
+          <div class="typer-ol-best" id="typerBest"></div>
         </div>
       </div>
     </div>
   </div>
-</section>
 
-<section id="work" class="work-section">
-  <div class="section-container">
-    <div class="section-num">03 <span class="section-num-label">Work</span></div>
-    <div class="projects-master">
-      <nav class="proj-list" id="projList"></nav>
-      <div class="proj-detail" id="projDetail"></div>
+  <nav class="navbar">
+    <div class="nav-content">
+      <div class="nav-logo">A<span>C</span></div>
+      <div class="nav-links">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#work" class="nav-link">Work</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-right">
+        <button class="btn-nav" id="gameBtn">▶ Play</button>
+        <button class="btn-nav" id="themeToggle">
+          <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        </button>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
     </div>
-  </div>
-</section>
+  </nav>
 
-<section id="contact" class="contact-section">
-  <div class="section-container">
-    <div class="section-num">04 <span class="section-num-label">Contact</span></div>
-    <div class="contact-grid">
-      <div class="contact-block">
-        <h3 class="contact-heading">Let's Work Together</h3>
-        <p class="contact-sub">Have a project in mind or just want to say hello? I'd love to hear from you.</p>
-        <div class="local-time"><span class="local-time-dot"></span>Bucharest &nbsp;·&nbsp; <span id="localTime">--:--:--</span></div>
-        <div class="contact-links">
-          <a href="https://instagram.com/cefacicata" target="_blank" class="contact-btn">Instagram</a>
-          <a href="https://github.com/cfcata03" target="_blank" class="contact-btn">GitHub</a>
-          <a href="https://www.linkedin.com/in/alexandru-calin-976050287/" target="_blank" class="contact-btn">LinkedIn</a>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" class="mobile-link">About</a>
+    <a href="#skills" class="mobile-link">Skills</a>
+    <a href="#work" class="mobile-link">Work</a>
+    <a href="#contact" class="mobile-link">Contact</a>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="hero-bg-num">AC</div>
+      <div class="section-container">
+        <a href="https://www.linkedin.com/in/alexandru-calin-976050287/" target="_blank" class="hero-label">Open to work ↗</a>
+        <h1 class="hero-name">Alexandru<em>Calin</em></h1>
+        <p class="hero-sub"><span id="typed"></span><span class="cursor">_</span></p>
+        <div class="hero-actions">
+          <a href="#work" class="btn btn-solid">View Work →</a>
+          <button class="btn btn-outline" id="cvBtn">↗ View CV</button>
         </div>
       </div>
-      <div class="contact-block">
-        <form class="contact-form" id="contactForm">
-          <input type="hidden" name="access_key" value="b78b0f2f-90fc-4b08-9be2-b099818ef205">
-          <input type="hidden" name="subject" value="New Contact from Portfolio">
-          <div class="form-group"><label class="form-label">Name</label><input type="text" name="name" placeholder="Your name" required class="form-input"></div>
-          <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" placeholder="your@email.com" required class="form-input"></div>
-          <div class="form-group"><label class="form-label">Message</label><textarea name="message" rows="4" placeholder="Tell me about your project..." required class="form-input form-textarea"></textarea></div>
-          <button type="submit" class="form-submit"><span>Send Message</span></button>
-          <div class="form-response" id="formResponse"></div>
-        </form>
+    </section>
+
+    <section id="about" class="about-section">
+      <div class="section-container">
+        <div class="section-num">01 <span class="section-num-label">About</span></div>
+        <div class="about-grid">
+          <div class="about-block">
+            <p>Engineering student at <strong>Polytechnic University of Bucharest</strong> passionate about web &amp; software development.</p>
+            <p>Proficient in Python, C++/C/C#, and web technologies. I build practical projects and continuously explore new technologies, focusing on applying my skills to create real-world solutions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="skills-section">
+      <div class="section-container">
+        <div class="section-num">02 <span class="section-num-label">Skills</span></div>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-name">Languages</div>
+            <div class="skill-tags">
+              <span class="tag">Python</span><span class="tag">C</span><span class="tag">C++</span>
+              <span class="tag">C#</span><span class="tag">Java</span><span class="tag">JavaScript</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-name">Web</div>
+            <div class="skill-tags">
+              <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">Vue.js</span><span class="tag">Firebase</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-name">Tools</div>
+            <div class="skill-tags">
+              <span class="tag">Git</span><span class="tag">Linux</span><span class="tag">POSIX</span><span class="tag">MySQL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="work-section">
+      <div class="section-container">
+        <div class="section-num">03 <span class="section-num-label">Work</span></div>
+        <div class="projects-master">
+          <nav class="proj-list" id="projList"></nav>
+          <div class="proj-detail" id="projDetail"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+      <div class="section-container">
+        <div class="section-num">04 <span class="section-num-label">Contact</span></div>
+        <div class="contact-grid">
+          <div class="contact-block">
+            <h3 class="contact-heading">Let's Work Together</h3>
+            <p class="contact-sub">Have a project in mind or just want to say hello? I'd love to hear from you.</p>
+            <div class="local-time"><span class="local-time-dot"></span>Bucharest &nbsp;·&nbsp; <span id="localTime">--:--:--</span></div>
+            <div class="contact-links">
+              <a href="https://instagram.com/cefacicata" target="_blank" class="contact-btn">Instagram</a>
+              <a href="https://github.com/cfcata03" target="_blank" class="contact-btn">GitHub</a>
+              <a href="https://www.linkedin.com/in/alexandru-calin-976050287/" target="_blank" class="contact-btn">LinkedIn</a>
+            </div>
+          </div>
+          <div class="contact-block">
+            <form class="contact-form" id="contactForm">
+              <input type="hidden" name="access_key" value="b78b0f2f-90fc-4b08-9be2-b099818ef205">
+              <input type="hidden" name="subject" value="New Contact from Portfolio">
+              <div class="form-group"><label class="form-label">Name</label><input type="text" name="name" placeholder="Your name" required class="form-input"></div>
+              <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" placeholder="your@email.com" required class="form-input"></div>
+              <div class="form-group"><label class="form-label">Message</label><textarea name="message" rows="4" placeholder="Tell me about your project..." required class="form-input form-textarea"></textarea></div>
+              <button type="submit" class="form-submit"><span>Send Message</span></button>
+              <div class="form-response" id="formResponse"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- World Cup widget -->
+  <div class="wc-widget" id="wcWidget">
+    <button class="wc-toggle" id="wcToggle" aria-label="Open World Cup widget">
+      <span class="wc-toggle-flag">🇦🇷</span>
+      <span class="wc-toggle-pulse"></span>
+    </button>
+    <div class="wc-panel" id="wcPanel" aria-hidden="true">
+      <div class="wc-head">
+        <span class="wc-title"><span class="wc-live"></span>World Cup 2026</span>
+        <button class="wc-close" id="wcClose" aria-label="Close widget">✕</button>
+      </div>
+      <div class="wc-body">
+        <div class="wc-player">
+          <div class="wc-player-top">
+            <span class="wc-player-name">Lionel Messi</span>
+            <span class="wc-player-num">10</span>
+          </div>
+          <div class="wc-stats">
+            <div class="wc-stat"><span class="wc-stat-val" id="wcGoals">—</span><span class="wc-stat-lbl">Goals</span></div>
+            <div class="wc-stat"><span class="wc-stat-val" id="wcAssists">—</span><span class="wc-stat-lbl">Assists</span></div>
+            <div class="wc-stat"><span class="wc-stat-val" id="wcMatches">—</span><span class="wc-stat-lbl">Matches</span></div>
+          </div>
+        </div>
+        <div class="wc-match">
+          <div class="wc-match-lbl">Argentina — next match</div>
+          <div class="wc-match-teams" id="wcMatchTeams">🇦🇷 ARG <span class="wc-vs">vs</span> ???</div>
+          <div class="wc-countdown" id="wcCountdown">
+            <div class="wc-cd-seg"><span class="wc-cd-val" id="wcDays">00</span><span class="wc-cd-lbl">days</span></div>
+            <div class="wc-cd-seg"><span class="wc-cd-val" id="wcHours">00</span><span class="wc-cd-lbl">hrs</span></div>
+            <div class="wc-cd-seg"><span class="wc-cd-val" id="wcMins">00</span><span class="wc-cd-lbl">min</span></div>
+            <div class="wc-cd-seg"><span class="wc-cd-val" id="wcSecs">00</span><span class="wc-cd-lbl">sec</span></div>
+          </div>
+          <div class="wc-match-meta" id="wcMatchMeta"></div>
+        </div>
       </div>
     </div>
   </div>
-</section>
-</main>
 
-<footer class="footer">
-  <div class="footer-logo">A<span>C</span></div>
-  <div class="footer-line">© 2026 Alexandru Calin</div>
-</footer>
+  <footer class="footer">
+    <div class="footer-logo">A<span>C</span></div>
+    <div class="footer-line">© 2026 Alexandru Calin</div>
+  </footer>
 
-<script>
-window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loadingScreen').classList.add('hide'),800));
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('theme',t);}
-function toggleTheme(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
-const saved=localStorage.getItem('theme');
-if(saved)setTheme(saved);else if(window.matchMedia('(prefers-color-scheme: dark)').matches)setTheme('dark');
-document.getElementById('themeToggle').addEventListener('click',toggleTheme);
-const hamburger=document.getElementById('hamburger'),mobileMenu=document.getElementById('mobileMenu');
-hamburger.addEventListener('click',()=>{hamburger.classList.toggle('active');mobileMenu.classList.toggle('active');document.body.style.overflow=mobileMenu.classList.contains('active')?'hidden':'';});
-document.querySelectorAll('.mobile-link').forEach(l=>l.addEventListener('click',()=>{hamburger.classList.remove('active');mobileMenu.classList.remove('active');document.body.style.overflow='';}));
-document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)window.scrollTo({top:t.offsetTop-56,behavior:'smooth'});}));
-window.addEventListener('scroll',()=>{const s=document.querySelectorAll('section[id]'),y=window.pageYOffset,atBot=y+window.innerHeight>=document.documentElement.scrollHeight-50;let active=null;s.forEach(sec=>{const top=sec.offsetTop-150;if(atBot&&sec.id==='contact')active='contact';else if(y>=top&&y<top+sec.offsetHeight)active=sec.id;});document.querySelectorAll('.nav-link').forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+active));});
-const phrases=['Aspiring Engineer & Developer','Web Developer','Problem Solver','Coding Enthusiast'];
-const typedEl=document.getElementById('typed');let pIdx=0,cIdx=0,del=false;
-function type(){const cur=phrases[pIdx];typedEl.textContent=del?cur.substring(0,cIdx-1):cur.substring(0,cIdx+1);del?cIdx--:cIdx++;if(!del&&cIdx===cur.length){del=true;setTimeout(type,2000);return;}if(del&&cIdx===0){del=false;pIdx=(pIdx+1)%phrases.length;setTimeout(type,400);return;}setTimeout(type,del?40:80);}
-type();
-function updateTime(){const el=document.getElementById('localTime');if(!el)return;el.textContent=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Bucharest',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date());}
-updateTime();setInterval(updateTime,1000);
-const contactForm=document.getElementById('contactForm'),formResponse=document.getElementById('formResponse');
-contactForm.addEventListener('submit',async e=>{e.preventDefault();const btn=contactForm.querySelector('.form-submit span');btn.textContent='Sending...';contactForm.querySelector('.form-submit').disabled=true;try{const res=await fetch('https://api.web3forms.com/submit',{method:'POST',body:new FormData(contactForm)});const data=await res.json();if(data.success){formResponse.textContent='Message sent!';formResponse.className='form-response success';contactForm.reset();}else throw new Error(data.message);}catch{formResponse.textContent='Something went wrong. Please try again.';formResponse.className='form-response error';}finally{contactForm.querySelector('.form-submit').disabled=false;btn.textContent='Send Message';setTimeout(()=>{formResponse.style.display='none';},5000);}});
-// ── CV Modal ──
-const cvModal=document.getElementById('cvModal');
-function closeCvModal(){cvModal.classList.remove('active');document.body.style.overflow='';}
-document.getElementById('cvBtn').addEventListener('click',()=>{cvModal.classList.add('active');document.body.style.overflow='hidden';});
-document.getElementById('cvClose').addEventListener('click',closeCvModal);
-cvModal.addEventListener('click',e=>{if(e.target===cvModal)closeCvModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&cvModal.classList.contains('active'))closeCvModal();});
-// ── Scroll reveal ──
-const revealObs=new IntersectionObserver((entries)=>{
-  entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('sr-in');revealObs.unobserve(en.target);}});
-},{threshold:0.08});
-document.querySelectorAll('section[id]').forEach(s=>{s.classList.add('sr');revealObs.observe(s);});
-// ── Type Racer ──
-const gameBtn=document.getElementById('gameBtn'),gameModal=document.getElementById('gameModal');
-let tWords=[],tWordIdx=0,tTyped='',tCorrectWords=0,tAttempted=0,tTimeLeft=30,tTimerId=null,tRunning=false,tBestWpm=0;
+  <script>
+    window.addEventListener('load', () => setTimeout(() => document.getElementById('loadingScreen').classList.add('hide'), 800));
 
-const TPOOL=[...'function const return async await import export class type array string number boolean null undefined promise callback scope loop switch break continue error stack render state props hook effect context component router middleware endpoint request response server client database query schema token session cache index hash algorithm recursion variable constant method prototype compile runtime memory thread socket event parse validate throttle singleton observer the be to of and a in that have it for not on with he as you do at this but by from they we say she or an will one all would there their what so up out if about who get which go me when make can like time no just know take into year your good some could them see other than then now look only come its over think also back after use how our work first well way even new want because any these give day most great between need large often real feel talk soon family leave measure door book step true during remember fast travel morning simple slow love money serve road rain rule pull cold force blue decide deep moon foot system busy record boat common gold possible plane wonder laugh thousand ago check game shape hot miss heat bring yes fill paint language grand ball wave drop heart present heavy dance engine alone draw describe plant straight century outside everything tall already school point special count hard science often'.split(' ')];
-
-function rngWords(n){const a=[...TPOOL];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,n);}
-
-function initTyper(){
-  tWords=rngWords(80);tWordIdx=0;tTyped='';tCorrectWords=0;tAttempted=0;
-  tTimeLeft=30;tRunning=false;clearInterval(tTimerId);
-  document.getElementById('typerTime').textContent='30';
-  document.getElementById('typerTime').classList.remove('low');
-  document.getElementById('typerWpm').textContent='—';
-  document.getElementById('typerAcc').textContent='—';
-  const inp=document.getElementById('typerInput');inp.value='';
-  document.getElementById('typerWords').scrollTop=0;
-  renderTyperWords();
-  showTyperOverlay(false);
-}
-
-function showTyperOverlay(done,wpm,acc){
-  const ol=document.getElementById('typerOverlay');
-  ol.style.display='flex';
-  if(done){
-    const nb=wpm>tBestWpm&&wpm>0;if(nb)tBestWpm=wpm;
-    document.getElementById('typerOlTitle').textContent=nb?'NEW BEST!':'DONE';
-    const res=document.getElementById('typerOlResult');res.style.display='flex';
-    res.innerHTML=`<div class="tor-item"><span class="tor-val">${wpm}</span><span class="tor-lbl">WPM</span></div><div class="tor-item"><span class="tor-val">${acc}%</span><span class="tor-lbl">ACC</span></div>`;
-    document.getElementById('typerOlSub').textContent='tab to restart';
-    document.getElementById('typerStart').textContent='PLAY AGAIN';
-    document.getElementById('typerBest').textContent=tBestWpm>0&&!nb?`BEST: ${tBestWpm} WPM`:'';
-  } else {
-    document.getElementById('typerOlTitle').textContent='TYPE RACER';
-    document.getElementById('typerOlResult').style.display='none';
-    document.getElementById('typerOlSub').textContent='30 seconds · tab to restart';
-    document.getElementById('typerStart').textContent='START';
-    document.getElementById('typerBest').textContent=tBestWpm>0?`BEST: ${tBestWpm} WPM`:'';
-  }
-  document.getElementById('typerStart').onclick=startTyper;
-}
-
-function startTyper(){
-  document.getElementById('typerOverlay').style.display='none';
-  document.getElementById('typerInput').focus();
-  tRunning=true;
-  tTimerId=setInterval(()=>{
-    tTimeLeft--;
-    const tEl=document.getElementById('typerTime');
-    tEl.textContent=tTimeLeft;
-    if(tTimeLeft<=5)tEl.classList.add('low');
-    refreshLiveStats();
-    if(tTimeLeft<=0)endTyper();
-  },1000);
-}
-
-function refreshLiveStats(){
-  const elapsed=30-tTimeLeft;
-  if(elapsed===0||tAttempted===0)return;
-  document.getElementById('typerWpm').textContent=Math.round(tCorrectWords/(elapsed/60));
-  document.getElementById('typerAcc').textContent=Math.round((tCorrectWords/tAttempted)*100)+'%';
-}
-
-function endTyper(){
-  clearInterval(tTimerId);tRunning=false;
-  const wpm=Math.round(tCorrectWords/0.5);
-  const acc=Math.round((tCorrectWords/Math.max(1,tAttempted))*100);
-  showTyperOverlay(true,wpm,acc);
-}
-
-function renderTyperWords(){
-  const el=document.getElementById('typerWords');
-  let html='';
-  tWords.forEach((word,wi)=>{
-    if(wi<tWordIdx){
-      html+=`<span class="tw tw-done">${word} </span>`;
-    } else if(wi===tWordIdx){
-      let chars='';
-      for(let ci=0;ci<word.length;ci++){
-        if(ci<tTyped.length) chars+=`<span class="${tTyped[ci]===word[ci]?'tc-ok':'tc-err'}">${word[ci]}</span>`;
-        else if(ci===tTyped.length) chars+=`<span class="tc-cur">${word[ci]}</span>`;
-        else chars+=`<span>${word[ci]}</span>`;
-      }
-      if(tTyped.length>=word.length){
-        if(tTyped.length>word.length) chars+=`<span class="tc-err">${tTyped.slice(word.length)}</span>`;
-        chars+=`<span class="tc-cur-end"></span>`;
-      }
-      html+=`<span class="tw" id="twCur">${chars} </span>`;
-    } else {
-      html+=`<span class="tw">${word} </span>`;
+    function setTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('theme', t);
     }
-  });
-  el.innerHTML=html;
-  const cur=document.getElementById('twCur');
-  if(cur){
-    const lh=parseFloat(getComputedStyle(el).lineHeight)||36;
-    if(cur.getBoundingClientRect().top-el.getBoundingClientRect().top>=lh*2.1) el.scrollTop+=lh;
-  }
-}
 
-document.getElementById('typerInput').addEventListener('input',function(){
-  if(!tRunning)return;
-  const val=this.value;
-  if(val.endsWith(' ')){
-    const typed=val.trimEnd();
-    if(!typed.length){this.value='';return;}
-    tAttempted++;
-    if(typed===tWords[tWordIdx])tCorrectWords++;
-    tWordIdx++;tTyped='';this.value='';
-    if(tWordIdx>=tWords.length)endTyper();
-  } else {
-    tTyped=val;
-  }
-  renderTyperWords();
-  refreshLiveStats();
-});
-
-document.getElementById('typerWrap').addEventListener('click',()=>{if(tRunning)document.getElementById('typerInput').focus();});
-
-gameBtn.addEventListener('click',()=>{gameModal.classList.add('active');initTyper();});
-document.getElementById('gameClose').addEventListener('click',()=>{
-  gameModal.classList.remove('active');clearInterval(tTimerId);tRunning=false;
-});
-document.addEventListener('keydown',e=>{
-  if(!gameModal.classList.contains('active'))return;
-  if(e.key==='Tab'){e.preventDefault();initTyper();}
-  if(e.key==='Escape'){gameModal.classList.remove('active');clearInterval(tTimerId);tRunning=false;}
-});
-// ── Projects master-detail ──
-const PROJECTS=[
-  {num:'01',name:'bench',href:'https://github.com/cfcata03/bench',tags:['Python','curses','psutil'],desc:'Lightweight terminal system monitor built with Python and curses. Displays live CPU usage per core, RAM and swap, disk partitions, network receive/send rates, and a process list sorted by CPU — all color-coded green to red by load.'},
-  {num:'02',name:'chain',href:'https://github.com/cfcata03/Chain-Reaction-app',tags:['C','IPC','POSIX'],desc:'Multi-process nuclear chain reaction simulator built in C using fork, pipes, shared memory, and semaphores. Manages concurrent child processes representing neutrons, with real-time statistics on reactions, fissions, and energy output.'},
-  {num:'03',name:'wordle',href:'https://github.com/cfcata03/wordle',tags:['Python','Flask','JavaScript'],desc:'A fully functional Wordle clone built with Flask. Features a Python backend handling word validation and game state, and an interactive frontend with color-coded tile feedback, an on-screen keyboard, and streak tracking.'},
-  {num:'04',name:'task manager',href:'https://github.com/cfcata03/task-manager-terminal',tags:['Python','Rich'],desc:'Keyboard-driven Kanban task manager that runs entirely in the terminal, built with Python and the Rich library. Supports multiple status columns, priority levels with color coding, task creation and editing, and persistent JSON-based storage.'},
-  {num:'05',name:'arcade',href:'https://github.com/cfcata03/arcade',tags:['Python','curses'],desc:'Five classic games — Hangman, Blackjack, Battleship, 2048, and Tetris — all running inside one unified terminal app built with Python and curses. Features a main menu, per-game score tracking, and a consistent TUI design across all games.'},
-  {num:'06',name:'focus',href:'https://github.com/cfcata03/productivity-timer',tags:['Python','curses'],desc:'All-in-one terminal productivity suite built with Python and curses. Includes a Pomodoro timer with configurable intervals, a per-project time tracker, and a habit tracker with daily streak counts — all exportable to CSV.'},
-  {num:'07',name:'snip',href:'https://github.com/cfcata03/snip',tags:['Python','curses','TUI'],desc:'Fuzzy TUI snippet manager for saving and searching terminal commands. Features placeholder substitution filled interactively before running, tag-based filtering, usage tracking that floats most-used snippets to the top, and portable plain-JSON storage.'},
-  {num:'08',name:'flow',href:'https://github.com/cfcata03/flow',tags:['Python','YAML','TUI'],desc:'Interactive terminal runbook runner. Define multi-step runbooks in plain YAML, search them with fuzzy matching, and walk through each step interactively — with placeholder substitution, step-by-step run/skip/quit control, retry on failure, and $EDITOR integration.'},
-  {num:'09',name:'weather',href:'https://github.com/cfcata03/weather-dashboard-terminal',tags:['Python','curses','Open-Meteo'],desc:'Terminal weather dashboard built with Python and curses. Displays current conditions, a 12-hour forecast, and 7-day outlook with ASCII icons and color-coded temperatures. Powered by Open-Meteo — no API key needed. Includes °C/°F toggle, auto-refresh, and cached location.'},
-  {num:'10',name:'in progress',href:null,tags:['Coming Soon'],desc:'',soon:true},
-];
-let activeProjIdx=0,wipTimer=null;
-function clearWip(){if(wipTimer){clearTimeout(wipTimer);wipTimer=null;}}
-const WIP_LINES=[
-  `<span class="wip-prompt">$</span> git init new-project`,
-  `<span class="wip-prompt">$</span> touch main.py`,
-  `<span class="wip-cmt"># TODO: have a brilliant idea</span>`,
-  `<span class="wip-kw">def</span> <span class="wip-fn">build_something</span>():`,
-  `    progress = <span class="wip-num">0</span>`,
-  `    <span class="wip-kw">while</span> progress &lt; <span class="wip-num">100</span>:`,
-  `        <span class="wip-fn">drink</span>(coffee)  <span class="wip-cmt"># ☕</span>`,
-  `        <span class="wip-fn">write_code</span>()`,
-  `        progress += <span class="wip-fn">random</span>()`,
-  `<span class="wip-cmt"># still cooking... check back soon</span>`,
-];
-function startWipAnimation(){
-  const el=document.getElementById('wipCode');
-  if(!el)return;
-  el.innerHTML='';
-  let idx=0;
-  function addLine(){
-    if(!document.getElementById('wipCode'))return;
-    if(idx>=WIP_LINES.length){wipTimer=setTimeout(()=>{el.innerHTML='';idx=0;addLine();},2200);return;}
-    const span=document.createElement('span');
-    span.className='wip-line';
-    span.innerHTML=WIP_LINES[idx];
-    el.appendChild(span);
-    idx++;
-    wipTimer=setTimeout(addLine,210);
-  }
-  addLine();
-}
-function renderProjDetail(i){
-  clearWip();
-  const p=PROJECTS[i],el=document.getElementById('projDetail');
-  const tags=p.tags.map(t=>`<span class="tag">${t}</span>`).join('');
-  el.innerHTML=p.soon
-    ?`<div class="proj-card proj-card--soon"><div class="proj-card-num">${p.num}</div><div class="proj-card-title">${p.name} <span class="wip-badge">WIP</span></div><div class="wip-terminal"><div class="wip-terminal-bar"><span class="wip-dot wip-dot--red"></span><span class="wip-dot wip-dot--yellow"></span><span class="wip-dot wip-dot--green"></span><span class="wip-terminal-title">build.py</span></div><div class="wip-code" id="wipCode"></div></div></div>`
-    :`<a href="${p.href}" target="_blank" class="proj-card"><div class="proj-card-num">${p.num}</div><div class="proj-card-title">${p.name}</div><div class="proj-card-desc">${p.desc}</div><div class="proj-card-tags">${tags}</div><span class="proj-card-arrow">↗</span></a>`;
-  if(p.soon)startWipAnimation();
-}
-function renderProjList(){
-  const list=document.getElementById('projList');
-  list.innerHTML=PROJECTS.map((p,i)=>`<button class="proj-item${i===activeProjIdx?' active':''}${p.soon?' proj-item--soon':''}" data-i="${i}"><span class="proj-num-sm">${p.num}</span><span class="proj-name-sm">${p.name}</span></button>`).join('');
-  list.querySelectorAll('.proj-item').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      activeProjIdx=+btn.dataset.i;
-      list.querySelectorAll('.proj-item').forEach(b=>b.classList.toggle('active',b===btn));
-      renderProjDetail(activeProjIdx);
+    function toggleTheme() {
+      setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    }
+    const saved = localStorage.getItem('theme');
+    if (saved) setTheme(saved);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) setTheme('dark');
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    const hamburger = document.getElementById('hamburger'),
+      mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
     });
-  });
-}
-renderProjList();
-renderProjDetail(activeProjIdx);
-</script>
+    document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('active');
+      document.body.style.overflow = '';
+    }));
+    document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) window.scrollTo({
+        top: t.offsetTop - 56,
+        behavior: 'smooth'
+      });
+    }));
+    window.addEventListener('scroll', () => {
+      const s = document.querySelectorAll('section[id]'),
+        y = window.pageYOffset,
+        atBot = y + window.innerHeight >= document.documentElement.scrollHeight - 50;
+      let active = null;
+      s.forEach(sec => {
+        const top = sec.offsetTop - 150;
+        if (atBot && sec.id === 'contact') active = 'contact';
+        else if (y >= top && y < top + sec.offsetHeight) active = sec.id;
+      });
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + active));
+    });
+    const phrases = ['Aspiring Engineer & Developer', 'Web Developer', 'Problem Solver', 'Coding Enthusiast'];
+    const typedEl = document.getElementById('typed');
+    let pIdx = 0,
+      cIdx = 0,
+      del = false;
+
+    function type() {
+      const cur = phrases[pIdx];
+      typedEl.textContent = del ? cur.substring(0, cIdx - 1) : cur.substring(0, cIdx + 1);
+      del ? cIdx-- : cIdx++;
+      if (!del && cIdx === cur.length) {
+        del = true;
+        setTimeout(type, 2000);
+        return;
+      }
+      if (del && cIdx === 0) {
+        del = false;
+        pIdx = (pIdx + 1) % phrases.length;
+        setTimeout(type, 400);
+        return;
+      }
+      setTimeout(type, del ? 40 : 80);
+    }
+    type();
+
+    function updateTime() {
+      const el = document.getElementById('localTime');
+      if (!el) return;
+      el.textContent = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/Bucharest',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }).format(new Date());
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+    const contactForm = document.getElementById('contactForm'),
+      formResponse = document.getElementById('formResponse');
+    contactForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = contactForm.querySelector('.form-submit span');
+      btn.textContent = 'Sending...';
+      contactForm.querySelector('.form-submit').disabled = true;
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: new FormData(contactForm)
+        });
+        const data = await res.json();
+        if (data.success) {
+          formResponse.textContent = 'Message sent!';
+          formResponse.className = 'form-response success';
+          contactForm.reset();
+        } else throw new Error(data.message);
+      } catch {
+        formResponse.textContent = 'Something went wrong. Please try again.';
+        formResponse.className = 'form-response error';
+      } finally {
+        contactForm.querySelector('.form-submit').disabled = false;
+        btn.textContent = 'Send Message';
+        setTimeout(() => {
+          formResponse.style.display = 'none';
+        }, 5000);
+      }
+    });
+    // ── CV Modal ──
+    const cvModal = document.getElementById('cvModal');
+
+    function closeCvModal() {
+      cvModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('cvBtn').addEventListener('click', () => {
+      cvModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+    document.getElementById('cvClose').addEventListener('click', closeCvModal);
+    cvModal.addEventListener('click', e => {
+      if (e.target === cvModal) closeCvModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && cvModal.classList.contains('active')) closeCvModal();
+    });
+    // ── Scroll reveal ──
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.classList.add('sr-in');
+          revealObs.unobserve(en.target);
+        }
+      });
+    }, {
+      threshold: 0.08
+    });
+    document.querySelectorAll('section[id]').forEach(s => {
+      s.classList.add('sr');
+      revealObs.observe(s);
+    });
+    // ── Type Racer ──
+    const gameBtn = document.getElementById('gameBtn'),
+      gameModal = document.getElementById('gameModal');
+    let tWords = [],
+      tWordIdx = 0,
+      tTyped = '',
+      tCorrectWords = 0,
+      tAttempted = 0,
+      tTimeLeft = 30,
+      tTimerId = null,
+      tRunning = false,
+      tBestWpm = 0;
+
+    const TPOOL = [...'function const return async await import export class type array string number boolean null undefined promise callback scope loop switch break continue error stack render state props hook effect context component router middleware endpoint request response server client database query schema token session cache index hash algorithm recursion variable constant method prototype compile runtime memory thread socket event parse validate throttle singleton observer the be to of and a in that have it for not on with he as you do at this but by from they we say she or an will one all would there their what so up out if about who get which go me when make can like time no just know take into year your good some could them see other than then now look only come its over think also back after use how our work first well way even new want because any these give day most great between need large often real feel talk soon family leave measure door book step true during remember fast travel morning simple slow love money serve road rain rule pull cold force blue decide deep moon foot system busy record boat common gold possible plane wonder laugh thousand ago check game shape hot miss heat bring yes fill paint language grand ball wave drop heart present heavy dance engine alone draw describe plant straight century outside everything tall already school point special count hard science often'.split(' ')];
+
+    function rngWords(n) {
+      const a = [...TPOOL];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a.slice(0, n);
+    }
+
+    function initTyper() {
+      tWords = rngWords(80);
+      tWordIdx = 0;
+      tTyped = '';
+      tCorrectWords = 0;
+      tAttempted = 0;
+      tTimeLeft = 30;
+      tRunning = false;
+      clearInterval(tTimerId);
+      document.getElementById('typerTime').textContent = '30';
+      document.getElementById('typerTime').classList.remove('low');
+      document.getElementById('typerWpm').textContent = '—';
+      document.getElementById('typerAcc').textContent = '—';
+      const inp = document.getElementById('typerInput');
+      inp.value = '';
+      document.getElementById('typerWords').scrollTop = 0;
+      renderTyperWords();
+      showTyperOverlay(false);
+    }
+
+    function showTyperOverlay(done, wpm, acc) {
+      const ol = document.getElementById('typerOverlay');
+      ol.style.display = 'flex';
+      if (done) {
+        const nb = wpm > tBestWpm && wpm > 0;
+        if (nb) tBestWpm = wpm;
+        document.getElementById('typerOlTitle').textContent = nb ? 'NEW BEST!' : 'DONE';
+        const res = document.getElementById('typerOlResult');
+        res.style.display = 'flex';
+        res.innerHTML = `<div class="tor-item"><span class="tor-val">${wpm}</span><span class="tor-lbl">WPM</span></div><div class="tor-item"><span class="tor-val">${acc}%</span><span class="tor-lbl">ACC</span></div>`;
+        document.getElementById('typerOlSub').textContent = 'tab to restart';
+        document.getElementById('typerStart').textContent = 'PLAY AGAIN';
+        document.getElementById('typerBest').textContent = tBestWpm > 0 && !nb ? `BEST: ${tBestWpm} WPM` : '';
+      } else {
+        document.getElementById('typerOlTitle').textContent = 'TYPE RACER';
+        document.getElementById('typerOlResult').style.display = 'none';
+        document.getElementById('typerOlSub').textContent = '30 seconds · tab to restart';
+        document.getElementById('typerStart').textContent = 'START';
+        document.getElementById('typerBest').textContent = tBestWpm > 0 ? `BEST: ${tBestWpm} WPM` : '';
+      }
+      document.getElementById('typerStart').onclick = startTyper;
+    }
+
+    function startTyper() {
+      document.getElementById('typerOverlay').style.display = 'none';
+      document.getElementById('typerInput').focus();
+      tRunning = true;
+      tTimerId = setInterval(() => {
+        tTimeLeft--;
+        const tEl = document.getElementById('typerTime');
+        tEl.textContent = tTimeLeft;
+        if (tTimeLeft <= 5) tEl.classList.add('low');
+        refreshLiveStats();
+        if (tTimeLeft <= 0) endTyper();
+      }, 1000);
+    }
+
+    function refreshLiveStats() {
+      const elapsed = 30 - tTimeLeft;
+      if (elapsed === 0 || tAttempted === 0) return;
+      document.getElementById('typerWpm').textContent = Math.round(tCorrectWords / (elapsed / 60));
+      document.getElementById('typerAcc').textContent = Math.round((tCorrectWords / tAttempted) * 100) + '%';
+    }
+
+    function endTyper() {
+      clearInterval(tTimerId);
+      tRunning = false;
+      const wpm = Math.round(tCorrectWords / 0.5);
+      const acc = Math.round((tCorrectWords / Math.max(1, tAttempted)) * 100);
+      showTyperOverlay(true, wpm, acc);
+    }
+
+    function renderTyperWords() {
+      const el = document.getElementById('typerWords');
+      let html = '';
+      tWords.forEach((word, wi) => {
+        if (wi < tWordIdx) {
+          html += `<span class="tw tw-done">${word} </span>`;
+        } else if (wi === tWordIdx) {
+          let chars = '';
+          for (let ci = 0; ci < word.length; ci++) {
+            if (ci < tTyped.length) chars += `<span class="${tTyped[ci]===word[ci]?'tc-ok':'tc-err'}">${word[ci]}</span>`;
+            else if (ci === tTyped.length) chars += `<span class="tc-cur">${word[ci]}</span>`;
+            else chars += `<span>${word[ci]}</span>`;
+          }
+          if (tTyped.length >= word.length) {
+            if (tTyped.length > word.length) chars += `<span class="tc-err">${tTyped.slice(word.length)}</span>`;
+            chars += `<span class="tc-cur-end"></span>`;
+          }
+          html += `<span class="tw" id="twCur">${chars} </span>`;
+        } else {
+          html += `<span class="tw">${word} </span>`;
+        }
+      });
+      el.innerHTML = html;
+      const cur = document.getElementById('twCur');
+      if (cur) {
+        const lh = parseFloat(getComputedStyle(el).lineHeight) || 36;
+        if (cur.getBoundingClientRect().top - el.getBoundingClientRect().top >= lh * 2.1) el.scrollTop += lh;
+      }
+    }
+
+    document.getElementById('typerInput').addEventListener('input', function() {
+      if (!tRunning) return;
+      const val = this.value;
+      if (val.endsWith(' ')) {
+        const typed = val.trimEnd();
+        if (!typed.length) {
+          this.value = '';
+          return;
+        }
+        tAttempted++;
+        if (typed === tWords[tWordIdx]) tCorrectWords++;
+        tWordIdx++;
+        tTyped = '';
+        this.value = '';
+        if (tWordIdx >= tWords.length) endTyper();
+      } else {
+        tTyped = val;
+      }
+      renderTyperWords();
+      refreshLiveStats();
+    });
+
+    document.getElementById('typerWrap').addEventListener('click', () => {
+      if (tRunning) document.getElementById('typerInput').focus();
+    });
+
+    gameBtn.addEventListener('click', () => {
+      gameModal.classList.add('active');
+      initTyper();
+    });
+    document.getElementById('gameClose').addEventListener('click', () => {
+      gameModal.classList.remove('active');
+      clearInterval(tTimerId);
+      tRunning = false;
+    });
+    document.addEventListener('keydown', e => {
+      if (!gameModal.classList.contains('active')) return;
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        initTyper();
+      }
+      if (e.key === 'Escape') {
+        gameModal.classList.remove('active');
+        clearInterval(tTimerId);
+        tRunning = false;
+      }
+    });
+    // ── Projects master-detail ──
+    const PROJECTS = [{
+        num: '01',
+        name: 'bench',
+        href: 'https://github.com/cfcata03/bench',
+        tags: ['Python', 'curses', 'psutil'],
+        desc: 'Lightweight terminal system monitor built with Python and curses. Displays live CPU usage per core, RAM and swap, disk partitions, network receive/send rates, and a process list sorted by CPU — all color-coded green to red by load.'
+      },
+      {
+        num: '02',
+        name: 'chain',
+        href: 'https://github.com/cfcata03/Chain-Reaction-app',
+        tags: ['C', 'IPC', 'POSIX'],
+        desc: 'Multi-process nuclear chain reaction simulator built in C using fork, pipes, shared memory, and semaphores. Manages concurrent child processes representing neutrons, with real-time statistics on reactions, fissions, and energy output.'
+      },
+      {
+        num: '03',
+        name: 'wordle',
+        href: 'https://github.com/cfcata03/wordle',
+        tags: ['Python', 'Flask', 'JavaScript'],
+        desc: 'A fully functional Wordle clone built with Flask. Features a Python backend handling word validation and game state, and an interactive frontend with color-coded tile feedback, an on-screen keyboard, and streak tracking.'
+      },
+      {
+        num: '04',
+        name: 'task manager',
+        href: 'https://github.com/cfcata03/task-manager-terminal',
+        tags: ['Python', 'Rich'],
+        desc: 'Keyboard-driven Kanban task manager that runs entirely in the terminal, built with Python and the Rich library. Supports multiple status columns, priority levels with color coding, task creation and editing, and persistent JSON-based storage.'
+      },
+      {
+        num: '05',
+        name: 'arcade',
+        href: 'https://github.com/cfcata03/arcade',
+        tags: ['Python', 'curses'],
+        desc: 'Five classic games — Hangman, Blackjack, Battleship, 2048, and Tetris — all running inside one unified terminal app built with Python and curses. Features a main menu, per-game score tracking, and a consistent TUI design across all games.'
+      },
+      {
+        num: '06',
+        name: 'focus',
+        href: 'https://github.com/cfcata03/productivity-timer',
+        tags: ['Python', 'curses'],
+        desc: 'All-in-one terminal productivity suite built with Python and curses. Includes a Pomodoro timer with configurable intervals, a per-project time tracker, and a habit tracker with daily streak counts — all exportable to CSV.'
+      },
+      {
+        num: '07',
+        name: 'snip',
+        href: 'https://github.com/cfcata03/snip',
+        tags: ['Python', 'curses', 'TUI'],
+        desc: 'Fuzzy TUI snippet manager for saving and searching terminal commands. Features placeholder substitution filled interactively before running, tag-based filtering, usage tracking that floats most-used snippets to the top, and portable plain-JSON storage.'
+      },
+      {
+        num: '08',
+        name: 'flow',
+        href: 'https://github.com/cfcata03/flow',
+        tags: ['Python', 'YAML', 'TUI'],
+        desc: 'Interactive terminal runbook runner. Define multi-step runbooks in plain YAML, search them with fuzzy matching, and walk through each step interactively — with placeholder substitution, step-by-step run/skip/quit control, retry on failure, and $EDITOR integration.'
+      },
+      {
+        num: '09',
+        name: 'weather',
+        href: 'https://github.com/cfcata03/weather-dashboard-terminal',
+        tags: ['Python', 'curses', 'Open-Meteo'],
+        desc: 'Terminal weather dashboard built with Python and curses. Displays current conditions, a 12-hour forecast, and 7-day outlook with ASCII icons and color-coded temperatures. Powered by Open-Meteo — no API key needed. Includes °C/°F toggle, auto-refresh, and cached location.'
+      },
+      {
+        num: '10',
+        name: 'in progress',
+        href: null,
+        tags: ['Coming Soon'],
+        desc: '',
+        soon: true
+      },
+    ];
+    let activeProjIdx = 0,
+      wipTimer = null;
+
+    function clearWip() {
+      if (wipTimer) {
+        clearTimeout(wipTimer);
+        wipTimer = null;
+      }
+    }
+    const WIP_LINES = [
+      `<span class="wip-prompt">$</span> git init new-project`,
+      `<span class="wip-prompt">$</span> touch main.py`,
+      `<span class="wip-cmt"># TODO: have a brilliant idea</span>`,
+      `<span class="wip-kw">def</span> <span class="wip-fn">build_something</span>():`,
+      `    progress = <span class="wip-num">0</span>`,
+      `    <span class="wip-kw">while</span> progress &lt; <span class="wip-num">100</span>:`,
+      `        <span class="wip-fn">drink</span>(coffee)  <span class="wip-cmt"># ☕</span>`,
+      `        <span class="wip-fn">write_code</span>()`,
+      `        progress += <span class="wip-fn">random</span>()`,
+      `<span class="wip-cmt"># still cooking... check back soon</span>`,
+    ];
+
+    function startWipAnimation() {
+      const el = document.getElementById('wipCode');
+      if (!el) return;
+      el.innerHTML = '';
+      let idx = 0;
+
+      function addLine() {
+        if (!document.getElementById('wipCode')) return;
+        if (idx >= WIP_LINES.length) {
+          wipTimer = setTimeout(() => {
+            el.innerHTML = '';
+            idx = 0;
+            addLine();
+          }, 2200);
+          return;
+        }
+        const span = document.createElement('span');
+        span.className = 'wip-line';
+        span.innerHTML = WIP_LINES[idx];
+        el.appendChild(span);
+        idx++;
+        wipTimer = setTimeout(addLine, 210);
+      }
+      addLine();
+    }
+
+    function renderProjDetail(i) {
+      clearWip();
+      const p = PROJECTS[i],
+        el = document.getElementById('projDetail');
+      const tags = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+      el.innerHTML = p.soon ?
+        `<div class="proj-card proj-card--soon"><div class="proj-card-num">${p.num}</div><div class="proj-card-title">${p.name} <span class="wip-badge">WIP</span></div><div class="wip-terminal"><div class="wip-terminal-bar"><span class="wip-dot wip-dot--red"></span><span class="wip-dot wip-dot--yellow"></span><span class="wip-dot wip-dot--green"></span><span class="wip-terminal-title">build.py</span></div><div class="wip-code" id="wipCode"></div></div></div>` :
+        `<a href="${p.href}" target="_blank" class="proj-card"><div class="proj-card-num">${p.num}</div><div class="proj-card-title">${p.name}</div><div class="proj-card-desc">${p.desc}</div><div class="proj-card-tags">${tags}</div><span class="proj-card-arrow">↗</span></a>`;
+      if (p.soon) startWipAnimation();
+    }
+
+    function renderProjList() {
+      const list = document.getElementById('projList');
+      list.innerHTML = PROJECTS.map((p, i) => `<button class="proj-item${i===activeProjIdx?' active':''}${p.soon?' proj-item--soon':''}" data-i="${i}"><span class="proj-num-sm">${p.num}</span><span class="proj-name-sm">${p.name}</span></button>`).join('');
+      list.querySelectorAll('.proj-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeProjIdx = +btn.dataset.i;
+          list.querySelectorAll('.proj-item').forEach(b => b.classList.toggle('active', b === btn));
+          renderProjDetail(activeProjIdx);
+        });
+      });
+    }
+    renderProjList();
+    renderProjDetail(activeProjIdx);
+  </script>
+
+  <script>
+    /* ── World Cup widget ──
+       Live countdown runs in the browser. Messi's stats can't be pulled
+       live on a static site (no key-less API), so update them here after
+       each Argentina match — it's a 3-second edit. */
+    const WC_CONFIG = {
+      messi: {
+        goals: 3,
+        assists: 0,
+        matches: 1,
+      },
+      nextMatch: {
+        opponent: 'MEX',           // 3-letter opponent code
+        opponentFlag: '🇲🇽',        // opponent flag emoji
+        kickoff: '2026-06-20T19:00:00-05:00', // ISO datetime WITH timezone offset
+        stage: 'Group A · Matchday 2',
+        venue: 'Estadio Azteca, Mexico City',
+      },
+    };
+
+    (function () {
+      const m = WC_CONFIG.messi;
+      document.getElementById('wcGoals').textContent = m.goals;
+      document.getElementById('wcAssists').textContent = m.assists;
+      document.getElementById('wcMatches').textContent = m.matches;
+
+      const nm = WC_CONFIG.nextMatch;
+      document.getElementById('wcMatchTeams').innerHTML =
+        `🇦🇷 ARG <span class="wc-vs">vs</span> ${nm.opponentFlag} ${nm.opponent}`;
+      document.getElementById('wcMatchMeta').textContent = nm.stage;
+
+      const target = new Date(nm.kickoff).getTime();
+      const cd = document.getElementById('wcCountdown');
+      const elD = document.getElementById('wcDays'),
+        elH = document.getElementById('wcHours'),
+        elMi = document.getElementById('wcMins'),
+        elS = document.getElementById('wcSecs');
+      const pad = n => String(n).padStart(2, '0');
+
+      function tickCountdown() {
+        let diff = target - Date.now();
+        if (diff <= 0) {
+          // within ~2h of kickoff → treat as live, else show kicked-off
+          if (diff > -2 * 3600 * 1000) {
+            cd.innerHTML = '<div class="wc-cd-now">● KICK-OFF — LIVE</div>';
+          } else {
+            cd.innerHTML = '<div class="wc-cd-now wc-cd-done">Match finished</div>';
+          }
+          clearInterval(wcTimer);
+          return;
+        }
+        const d = Math.floor(diff / 86400000);
+        diff -= d * 86400000;
+        const h = Math.floor(diff / 3600000);
+        diff -= h * 3600000;
+        const mi = Math.floor(diff / 60000);
+        diff -= mi * 60000;
+        const s = Math.floor(diff / 1000);
+        elD.textContent = pad(d);
+        elH.textContent = pad(h);
+        elMi.textContent = pad(mi);
+        elS.textContent = pad(s);
+      }
+      tickCountdown();
+      const wcTimer = setInterval(tickCountdown, 1000);
+
+      // ── open / close, with persistence ──
+      const widget = document.getElementById('wcWidget'),
+        toggle = document.getElementById('wcToggle'),
+        panel = document.getElementById('wcPanel'),
+        closeBtn = document.getElementById('wcClose');
+
+      function setOpen(open) {
+        widget.classList.toggle('open', open);
+        panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+        localStorage.setItem('wcOpen', open ? '1' : '0');
+      }
+      // default open on desktop, collapsed on small screens
+      const stored = localStorage.getItem('wcOpen');
+      setOpen(stored !== null ? stored === '1' : window.innerWidth > 720);
+
+      toggle.addEventListener('click', () => setOpen(!widget.classList.contains('open')));
+      closeBtn.addEventListener('click', () => setOpen(false));
+    })();
+  </script>
+
+  <script>
+    /* Dynamic coding-themed background: faint lines of code that type
+       themselves out at random spots, hold, then fade away. */
+    (function() {
+      const host = document.getElementById('codeBg');
+      if (!host) return;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const SNIPPETS = [
+        'const sum = (a, b) => a + b;',
+        'for (let i = 0; i < n; i++) {',
+        'def solve(x): return x * 2',
+        'git commit -m "ship it"',
+        'print("hello, world")',
+        'if (ready && !error) run();',
+        'array.map(x => x * 2)',
+        'SELECT * FROM users;',
+        'while not done: step()',
+        'import numpy as np',
+        '#include <stdio.h>',
+        'await fetch(endpoint)',
+        'export default App;',
+        'npm run build --prod',
+        'return [...prev, next];',
+        'class Node { next = null; }',
+        'sudo systemctl restart',
+        'pip install requests',
+        'docker compose up -d',
+        'try: main()  # go',
+        'let cache = new Map();',
+        'echo $PATH | grep bin',
+        'const [n, setN] = useState(0);',
+        'ssh root@10.0.0.1',
+      ];
+
+      // how many lines can live at once, scaled to viewport
+      function slotCount() {
+        return Math.max(3, Math.min(8,
+          Math.round(window.innerWidth * window.innerHeight / 200000)));
+      }
+
+      const rand = (a, b) => a + Math.random() * (b - a);
+      const pick = arr => arr[(Math.random() * arr.length) | 0];
+
+      function place(el, len) {
+        // keep the line inside the viewport (monospace ~ 0.6em per char)
+        const fs = rand(15, 21);
+        el.style.fontSize = fs.toFixed(1) + 'px';
+        const wpx = len * fs * 0.6;
+        const maxX = Math.max(8, window.innerWidth - wpx - 16);
+        el.style.left = rand(8, maxX) + 'px';
+        el.style.top = rand(window.innerHeight * 0.06,
+          window.innerHeight * 0.9) + 'px';
+        el.style.opacity = rand(0.1, 0.2).toFixed(3);
+      }
+
+      function runSlot(el) {
+        const text = pick(SNIPPETS);
+        place(el, text.length);
+        el.innerHTML = '<span class="cb-txt"></span><span class="cb-caret">▍</span>';
+        const txt = el.firstChild,
+          caret = el.lastChild;
+        let i = 0;
+
+        (function type() {
+          txt.textContent = text.slice(0, i);
+          if (i++ <= text.length) {
+            setTimeout(type, rand(38, 95));
+          } else {
+            caret.style.animation = 'cbBlink .7s step-end infinite';
+            setTimeout(() => { // hold, then fade out
+              el.style.transition = 'opacity 1s ease';
+              el.style.opacity = '0';
+              setTimeout(() => {
+                el.style.transition = '';
+                setTimeout(() => runSlot(el), rand(300, 1600));
+              }, 1000);
+            }, rand(1600, 3400));
+          }
+        })();
+      }
+
+      function build() {
+        host.innerHTML = '';
+        const n = reduce ? 4 : slotCount();
+        for (let i = 0; i < n; i++) {
+          const el = document.createElement('div');
+          el.className = 'cb-line';
+          host.appendChild(el);
+          if (reduce) {
+            const text = pick(SNIPPETS);
+            place(el, text.length);
+            el.textContent = text;
+          } else {
+            setTimeout(() => runSlot(el), rand(0, 2600));
+          }
+        }
+      }
+
+      let rt;
+      window.addEventListener('resize', () => {
+        clearTimeout(rt);
+        rt = setTimeout(build, 250);
+      });
+      build();
+    })();
+  </script>
 </body>
+
 </html>
