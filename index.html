@@ -37,12 +37,12 @@
       <div class="cv-modal-head">
         <span class="cv-modal-title">CV — Alexandru Calin</span>
         <div class="cv-modal-actions">
-          <a href="CV_AlexandruCalin.pdf" download class="btn btn-solid" style="padding:.5rem 1.25rem;font-size:.8rem;">↓ Download</a>
+          <a href="CV_July_2026.pdf" download class="btn btn-solid" style="padding:.5rem 1.25rem;font-size:.8rem;">↓ Download</a>
           <button id="cvClose" class="pm-close">✕</button>
         </div>
       </div>
       <div class="cv-modal-body">
-        <iframe src="CV_AlexandruCalin.pdf" class="cv-iframe"></iframe>
+        <iframe src="CV_July_2026.pdf" class="cv-iframe"></iframe>
       </div>
     </div>
   </div>
@@ -203,44 +203,6 @@
       </div>
     </section>
   </main>
-
-  <!-- World Cup widget -->
-  <div class="wc-widget" id="wcWidget">
-    <button class="wc-toggle" id="wcToggle" aria-label="Open World Cup widget">
-      <span class="wc-toggle-flag">🇦🇷</span>
-      <span class="wc-toggle-pulse"></span>
-    </button>
-    <div class="wc-panel" id="wcPanel" aria-hidden="true">
-      <div class="wc-head">
-        <span class="wc-title"><span class="wc-live"></span>World Cup 2026</span>
-        <button class="wc-close" id="wcClose" aria-label="Close widget">✕</button>
-      </div>
-      <div class="wc-body">
-        <div class="wc-player">
-          <div class="wc-player-top">
-            <span class="wc-player-name">Lionel Messi</span>
-            <span class="wc-player-num">10</span>
-          </div>
-          <div class="wc-stats">
-            <div class="wc-stat"><span class="wc-stat-val" id="wcGoals">—</span><span class="wc-stat-lbl">Goals</span></div>
-            <div class="wc-stat"><span class="wc-stat-val" id="wcAssists">—</span><span class="wc-stat-lbl">Assists</span></div>
-            <div class="wc-stat"><span class="wc-stat-val" id="wcMatches">—</span><span class="wc-stat-lbl">Matches</span></div>
-          </div>
-        </div>
-        <div class="wc-match">
-          <div class="wc-match-lbl">Argentina — next match</div>
-          <div class="wc-match-teams" id="wcMatchTeams">🇦🇷 ARG <span class="wc-vs">vs</span> ???</div>
-          <div class="wc-countdown" id="wcCountdown">
-            <div class="wc-cd-seg"><span class="wc-cd-val" id="wcDays">00</span><span class="wc-cd-lbl">days</span></div>
-            <div class="wc-cd-seg"><span class="wc-cd-val" id="wcHours">00</span><span class="wc-cd-lbl">hrs</span></div>
-            <div class="wc-cd-seg"><span class="wc-cd-val" id="wcMins">00</span><span class="wc-cd-lbl">min</span></div>
-            <div class="wc-cd-seg"><span class="wc-cd-val" id="wcSecs">00</span><span class="wc-cd-lbl">sec</span></div>
-          </div>
-          <div class="wc-match-meta" id="wcMatchMeta"></div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <footer class="footer">
     <div class="footer-logo">A<span>C</span></div>
@@ -712,92 +674,6 @@
     }
     renderProjList();
     renderProjDetail(activeProjIdx);
-  </script>
-
-  <script>
-    /* ── World Cup widget ──
-       Live countdown runs in the browser. Messi's stats can't be pulled
-       live on a static site (no key-less API), so update them here after
-       each Argentina match — it's a 3-second edit. */
-    const WC_CONFIG = {
-      messi: {
-        goals: 3,
-        assists: 0,
-        matches: 1,
-      },
-      nextMatch: {
-        opponent: 'MEX',           // 3-letter opponent code
-        opponentFlag: '🇲🇽',        // opponent flag emoji
-        kickoff: '2026-06-20T19:00:00-05:00', // ISO datetime WITH timezone offset
-        stage: 'Group A · Matchday 2',
-        venue: 'Estadio Azteca, Mexico City',
-      },
-    };
-
-    (function () {
-      const m = WC_CONFIG.messi;
-      document.getElementById('wcGoals').textContent = m.goals;
-      document.getElementById('wcAssists').textContent = m.assists;
-      document.getElementById('wcMatches').textContent = m.matches;
-
-      const nm = WC_CONFIG.nextMatch;
-      document.getElementById('wcMatchTeams').innerHTML =
-        `🇦🇷 ARG <span class="wc-vs">vs</span> ${nm.opponentFlag} ${nm.opponent}`;
-      document.getElementById('wcMatchMeta').textContent = nm.stage;
-
-      const target = new Date(nm.kickoff).getTime();
-      const cd = document.getElementById('wcCountdown');
-      const elD = document.getElementById('wcDays'),
-        elH = document.getElementById('wcHours'),
-        elMi = document.getElementById('wcMins'),
-        elS = document.getElementById('wcSecs');
-      const pad = n => String(n).padStart(2, '0');
-
-      function tickCountdown() {
-        let diff = target - Date.now();
-        if (diff <= 0) {
-          // within ~2h of kickoff → treat as live, else show kicked-off
-          if (diff > -2 * 3600 * 1000) {
-            cd.innerHTML = '<div class="wc-cd-now">● KICK-OFF — LIVE</div>';
-          } else {
-            cd.innerHTML = '<div class="wc-cd-now wc-cd-done">Match finished</div>';
-          }
-          clearInterval(wcTimer);
-          return;
-        }
-        const d = Math.floor(diff / 86400000);
-        diff -= d * 86400000;
-        const h = Math.floor(diff / 3600000);
-        diff -= h * 3600000;
-        const mi = Math.floor(diff / 60000);
-        diff -= mi * 60000;
-        const s = Math.floor(diff / 1000);
-        elD.textContent = pad(d);
-        elH.textContent = pad(h);
-        elMi.textContent = pad(mi);
-        elS.textContent = pad(s);
-      }
-      tickCountdown();
-      const wcTimer = setInterval(tickCountdown, 1000);
-
-      // ── open / close, with persistence ──
-      const widget = document.getElementById('wcWidget'),
-        toggle = document.getElementById('wcToggle'),
-        panel = document.getElementById('wcPanel'),
-        closeBtn = document.getElementById('wcClose');
-
-      function setOpen(open) {
-        widget.classList.toggle('open', open);
-        panel.setAttribute('aria-hidden', open ? 'false' : 'true');
-        localStorage.setItem('wcOpen', open ? '1' : '0');
-      }
-      // default open on desktop, collapsed on small screens
-      const stored = localStorage.getItem('wcOpen');
-      setOpen(stored !== null ? stored === '1' : window.innerWidth > 720);
-
-      toggle.addEventListener('click', () => setOpen(!widget.classList.contains('open')));
-      closeBtn.addEventListener('click', () => setOpen(false));
-    })();
   </script>
 
   <script>
